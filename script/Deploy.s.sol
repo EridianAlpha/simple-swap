@@ -5,45 +5,55 @@ import {Script, console2} from "lib/forge-std/src/Script.sol";
 
 import {ISimpleSwap} from "../src/interfaces/ISimpleSwap.sol";
 import {SimpleSwap} from "../src/SimpleSwap.sol";
+import {SimpleSwapInternalFunctionsHelper} from "../src/internalFunctionHelpers/SimpleSwapInternalFunctionsHelper.sol";
 import {Core} from "../src/Core.sol";
 
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import {HelperConfig} from "./HelperConfig.s.sol";
+import {NetworkHelper} from "./NetworkHelper.s.sol";
 
 // Import Modules
 // import {TokenSwapsModule} from "src/modules/TokenSwapsModule.sol";
 
 contract Deploy is Script {
-    function run() public returns (SimpleSwap, HelperConfig, address msgSender) {
-        HelperConfig helperConfig = new HelperConfig();
-        HelperConfig.NetworkConfig memory config = helperConfig.getActiveNetworkConfig();
+    // Standard deployment for the SimpleSwap contract
+    function standardDeployment() public returns (ERC1967Proxy) {
+        vm.broadcast();
+        address simpleSwapAddress = address(new SimpleSwap());
+        return genericDeployment(simpleSwapAddress);
+    }
 
-        ISimpleSwap.ContractAddress[] memory contractAddresses = config.contractAddresses;
-        ISimpleSwap.TokenAddress[] memory tokenAddresses = config.tokenAddresses;
+    // Deployment for the SimpleSwapInternalFunctionsHelper contract for testing internal functions
+    function internalFunctionsTestHelperDeployment() public returns (ERC1967Proxy) {
+        vm.broadcast();
+        address simpleSwapInternalFunctionsHelperAddress = address(new SimpleSwapInternalFunctionsHelper());
+        return genericDeployment(simpleSwapInternalFunctionsHelperAddress);
+    }
 
-        uint256 initialMaxSwap = config.initialMaxSwap;
-
-        // Specify the sender as msg.sender is needed for the test setup to work
-        // but that does not change anything for real deployments
-        vm.startBroadcast(msg.sender);
-
-        // Deploy the implementation contract
-        SimpleSwap simpleSwapImplementation = new SimpleSwap();
+    function genericDeployment(address implementation) internal returns (ERC1967Proxy) {
+        // Get the active network configuration
+        NetworkHelper networkHelper = new NetworkHelper();
+        NetworkHelper.NetworkConfig memory networkConfig = networkHelper.getActiveNetworkConfig();
 
         // Encode the initializer function
         bytes memory initData = abi.encodeWithSelector(
-            Core.initialize.selector, msg.sender, contractAddresses, tokenAddresses, initialMaxSwap
+            Core.initialize.selector,
+            msg.sender,
+            networkConfig.contractAddresses,
+            networkConfig.tokenAddresses,
+            networkConfig.initialMaxSwap
         );
 
+        vm.startBroadcast();
+
         // Deploy the proxy pointing to the implementation
-        ERC1967Proxy proxy = new ERC1967Proxy(address(simpleSwapImplementation), initData);
-        SimpleSwap simpleSwap = SimpleSwap(payable(address(proxy)));
+        ERC1967Proxy proxy = new ERC1967Proxy(implementation, initData);
 
         // Deploy the module contracts and pass in the proxy address now it is deployed
         // so that only the proxy address can use the modules
+        // TODO: For TokenSwap module also pass in networkConfig.uniswapV3Pools so that it can use that in its constructor
         // simpleSwap.updateContractAddress("tokenSwapsModule", address(new TokenSwapsModule(address(simpleSwap))));
 
         vm.stopBroadcast();
-        return (simpleSwap, helperConfig, msg.sender);
+        return (proxy);
     }
 }

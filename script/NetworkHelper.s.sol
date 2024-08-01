@@ -8,7 +8,7 @@ import {ERC20Mock} from "@openzeppelin/contracts/mocks/token/ERC20Mock.sol";
 
 import {ISimpleSwap} from "../src/interfaces/ISimpleSwap.sol";
 
-contract HelperConfig is Script {
+contract NetworkHelper is Script {
     function test() public {} // Added to remove this whole contract from coverage report.
 
     // Declare the chain variables

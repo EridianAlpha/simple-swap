@@ -47,20 +47,7 @@ contract Core is Updates {
         __AccessControlEnumerable_init();
         __AccessControl_init();
         __UUPSUpgradeable_init();
-        _initializeState(owner, contractAddresses, tokenAddresses, initialMaxSwap);
-    }
 
-    /// @notice Internal function to initialize the state of the contract.
-    /// @param owner The initial address of the owner of the contract.
-    /// @param contractAddresses An array of `ContractAddress` structures containing addresses of related contracts.
-    /// @param tokenAddresses An array of `TokenAddress` structures containing addresses of relevant ERC-20 tokens.
-    /// @param initialMaxSwap The initial maximum amount of ETH that can be swapped in a single transaction.
-    function _initializeState(
-        address owner,
-        ContractAddress[] memory contractAddresses,
-        TokenAddress[] memory tokenAddresses,
-        uint256 initialMaxSwap
-    ) internal {
         // Set the owner role and admin role to the owner address.
         _grantRole(OWNER_ROLE, owner);
         _setRoleAdmin(OWNER_ROLE, OWNER_ROLE);

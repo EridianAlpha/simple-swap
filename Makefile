@@ -3,6 +3,8 @@
 # ================================================================
 -include .env
 
+.PHONY: test
+
 help:
 	@echo "Usage:"
 	@echo "  make deploy anvil\n
@@ -75,7 +77,7 @@ test-v:; forge test --fork-url ${FORK_RPC_URL} -vvvv
 test-summary:; forge test --fork-url ${FORK_RPC_URL} --summary
 
 coverage:
-	@forge coverage --fork-url ${FORK_RPC_URL} --report summary --report lcov 
+	@forge coverage --ir-minimum --fork-url ${FORK_RPC_URL} --report summary --report lcov 
 	@echo
 
 coverage-report:
@@ -152,7 +154,7 @@ interactions-script = @forge script script/Interactions.s.sol:Interactions ${NET
 # │                  RUN COMMANDS - DEPLOY & UPGRADE             │
 # ================================================================
 # Deploy script
-deploy-script:; @forge script script/Deploy.s.sol:Deploy ${NETWORK_ARGS} -vvvv
+deploy-script:; @forge script script/Deploy.s.sol:Deploy --sig "standardDeployment()" ${NETWORK_ARGS} -vvvv
 deploy: get-network-args \
 	deploy-script
 
