@@ -11,11 +11,13 @@ import {ISimpleSwap} from "../src/interfaces/ISimpleSwap.sol";
 contract HelperConfig is Script {
     function test() public {} // Added to remove this whole contract from coverage report.
 
+    // Declare the chain variables
     address public uniswapV3RouterAddress;
     address public uniswapV3USDCETHPoolAddress;
     uint24 public uniswapV3USDCETHPoolFee;
     address public usdcAddress;
 
+    // Define the structs
     struct UniswapV3Pool {
         string identifier;
         address poolAddress;
@@ -29,6 +31,7 @@ contract HelperConfig is Script {
         uint256 initialMaxSwap;
     }
 
+    // Get the chain variables from the .env file
     function getChainVariables() public {
         uint256 chainId = block.chainid;
         string memory chainName;
@@ -52,6 +55,7 @@ contract HelperConfig is Script {
         usdcAddress = vm.envAddress(string(abi.encodePacked(chainName, "_ADDRESS_USDC")));
     }
 
+    // Get the active network configuration and return it
     function getActiveNetworkConfig() public returns (NetworkConfig memory) {
         NetworkConfig memory activeNetworkConfig;
 

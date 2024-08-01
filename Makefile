@@ -12,6 +12,8 @@ help:
 # ================================================================
 get-network-args: $(word 2, $(MAKECMDGOALS))-network
 
+# TODO: Just keep anvil and holesky for this project as it's dev only. Move the other networks to the template project
+
 anvil: # Added to stop error output when running commands e.g. make deploy anvil
 	@echo
 anvil-network:
