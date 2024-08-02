@@ -81,7 +81,7 @@ coverage:
 	@echo
 
 coverage-report:
-	@forge coverage --fork-url ${FORK_RPC_URL} --report debug > coverage-report.txt
+	@forge coverage --ir-minimum --fork-url ${FORK_RPC_URL} --report debug > coverage-report.txt
 	@echo Output saved to coverage-report.txt
 
 # ================================================================

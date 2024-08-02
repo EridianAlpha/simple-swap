@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-import {Script, console2} from "lib/forge-std/src/Script.sol";
+import {Script, console} from "lib/forge-std/src/Script.sol";
 
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {ERC20Mock} from "@openzeppelin/contracts/mocks/token/ERC20Mock.sol";
@@ -15,6 +15,7 @@ contract NetworkHelper is Script {
     address public uniswapV3RouterAddress;
     address public uniswapV3USDCETHPoolAddress;
     uint24 public uniswapV3USDCETHPoolFee;
+    address public wethAddress;
     address public usdcAddress;
 
     // Define the structs
@@ -28,7 +29,7 @@ contract NetworkHelper is Script {
         ISimpleSwap.ContractAddress[] contractAddresses;
         ISimpleSwap.TokenAddress[] tokenAddresses;
         UniswapV3Pool[] uniswapV3Pools;
-        uint256 initialMaxSwap;
+        uint16 initialSlippageTolerance;
     }
 
     // Get the chain variables from the .env file
@@ -52,6 +53,7 @@ contract NetworkHelper is Script {
             vm.envAddress(string(abi.encodePacked(chainName, "_ADDRESS_UNISWAP_V3_USDC_ETH_POOL")));
         uniswapV3USDCETHPoolFee =
             uint24(vm.envUint(string(abi.encodePacked(chainName, "_FEE_UNISWAP_V3_USDC_ETH_POOL"))));
+        wethAddress = vm.envAddress(string(abi.encodePacked(chainName, "_ADDRESS_WETH")));
         usdcAddress = vm.envAddress(string(abi.encodePacked(chainName, "_ADDRESS_USDC")));
     }
 
@@ -66,8 +68,9 @@ contract NetworkHelper is Script {
         contractAddresses[0] = ISimpleSwap.ContractAddress("uniswapV3Router", uniswapV3RouterAddress);
 
         // Token addresses
-        ISimpleSwap.TokenAddress[] memory tokenAddresses = new ISimpleSwap.TokenAddress[](1);
-        tokenAddresses[0] = ISimpleSwap.TokenAddress("USDC", usdcAddress);
+        ISimpleSwap.TokenAddress[] memory tokenAddresses = new ISimpleSwap.TokenAddress[](2);
+        tokenAddresses[0] = ISimpleSwap.TokenAddress("WETH", wethAddress);
+        tokenAddresses[1] = ISimpleSwap.TokenAddress("USDC", usdcAddress);
 
         // UniswapV3 pool
         UniswapV3Pool[] memory uniswapV3Pools = new UniswapV3Pool[](1);
@@ -77,7 +80,7 @@ contract NetworkHelper is Script {
             contractAddresses: contractAddresses,
             tokenAddresses: tokenAddresses,
             uniswapV3Pools: uniswapV3Pools,
-            initialMaxSwap: uint256(vm.envUint("INITIAL_MAX_SWAP"))
+            initialSlippageTolerance: uint16(vm.envUint("INITIAL_SLIPPAGE_TOLERANCE"))
         });
 
         return activeNetworkConfig;

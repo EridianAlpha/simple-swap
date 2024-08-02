@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-import {Test, console2 as console} from "forge-std/Test.sol";
+import {Test, console} from "forge-std/Test.sol";
 import {IAccessControl} from "@openzeppelin/contracts/access/IAccessControl.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
@@ -11,21 +11,25 @@ import {SimpleSwapInternalFunctionsHelper} from "src/internalFunctionHelpers/Sim
 
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {Deploy} from "script/Deploy.s.sol";
+import {NetworkHelper} from "script/NetworkHelper.s.sol";
 
-contract TestSetup is Test {
+contract SimpleSwapTestSetup is Test, SimpleSwap {
     // Added to remove this whole testing file from coverage report.
     function test() public {}
 
+    address contractCreator;
+
     SimpleSwap simpleSwap;
     SimpleSwapInternalFunctionsHelper simpleSwapInternalFunctionsHelper;
+
+    NetworkHelper.NetworkConfig simpleSwapNetworkConfig;
 
     // Setup testing constants
     uint256 internal constant GAS_PRICE = 1;
     uint256 internal constant STARTING_BALANCE = 10 ether;
     uint256 internal constant SEND_VALUE = 1 ether;
     uint256 internal constant USDC_BORROW_AMOUNT = 100000000; // 100 USDC in 1e6 scale
-    uint24 internal constant UNISWAPV3_POOL_FEE_CHANGE = 100;
-    uint16 internal constant SLIPPAGE_TOLERANCE_CHANGE = 100;
+    uint16 internal constant SLIPPAGE_TOLERANCE_INCREMENT = 100;
     string internal constant UPGRADE_EXAMPLE_VERSION = "9.9.9";
 
     // Create users
@@ -44,10 +48,15 @@ contract TestSetup is Test {
     function setUp() external {
         // Deploy standard contract and internal functions helper contract
         Deploy deploy = new Deploy();
-        (ERC1967Proxy simpleSwapProxy) = deploy.standardDeployment();
-        (ERC1967Proxy simpleSwapInternalFunctionsHelperProxy) = deploy.internalFunctionsTestHelperDeployment();
+        (ERC1967Proxy simpleSwapProxy, NetworkHelper.NetworkConfig memory _simpleSwapNetworkConfig, address msgSender) =
+            deploy.standardDeployment();
+        (ERC1967Proxy simpleSwapInternalFunctionsHelperProxy,,) = deploy.internalFunctionsTestHelperDeployment();
+
+        contractCreator = msgSender;
 
         simpleSwap = SimpleSwap(payable(address(simpleSwapProxy)));
+        simpleSwapNetworkConfig = _simpleSwapNetworkConfig;
+
         simpleSwapInternalFunctionsHelper =
             SimpleSwapInternalFunctionsHelper(payable(address(simpleSwapInternalFunctionsHelperProxy)));
 

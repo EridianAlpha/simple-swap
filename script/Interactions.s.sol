@@ -6,7 +6,7 @@ pragma solidity 0.8.26;
 // ================================================================
 
 // Forge and Script Imports
-import {Script, console2} from "lib/forge-std/src/Script.sol";
+import {Script, console} from "lib/forge-std/src/Script.sol";
 import {GetDeployedContract} from "script/GetDeployedContract.s.sol";
 
 // Contract Imports
@@ -54,14 +54,6 @@ contract Interactions is GetDeployedContract {
         version = simpleSwap.getVersion();
         vm.stopBroadcast();
         return version;
-    }
-
-    function getMaxSwap() public returns (uint256 maxSwap) {
-        vm.startBroadcast();
-        interactionsSetup();
-        maxSwap = simpleSwap.getMaxSwap();
-        vm.stopBroadcast();
-        return maxSwap;
     }
 
     // ================================================================

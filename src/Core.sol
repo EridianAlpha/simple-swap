@@ -37,12 +37,14 @@ contract Core is Updates {
     /// @param owner The address of the owner of the contract.
     /// @param contractAddresses An array of `ContractAddress` structures containing addresses of related contracts.
     /// @param tokenAddresses An array of `TokenAddress` structures containing addresses of relevant ERC-20 tokens.
-    /// @param initialMaxSwap The initial maximum amount of ETH that can be swapped in a single transaction.
+    /// @param uniswapV3Pools An array of `UniswapV3Pool` structures containing the address and fee of the UniswapV3 pools.
+    /// @param initialSlippageTolerance The initial slippage tolerance for token swaps.
     function initialize(
         address owner,
         ContractAddress[] memory contractAddresses,
         TokenAddress[] memory tokenAddresses,
-        uint256 initialMaxSwap
+        UniswapV3Pool[] memory uniswapV3Pools,
+        uint16 initialSlippageTolerance
     ) public initializer {
         __AccessControlEnumerable_init();
         __AccessControl_init();
@@ -62,9 +64,15 @@ contract Core is Updates {
             s_tokenAddresses[tokenAddresses[i].identifier] = tokenAddresses[i].tokenAddress;
         }
 
+        // Convert the uniswapV3Pools array to a mapping.
+        for (uint256 i = 0; i < uniswapV3Pools.length; i++) {
+            s_uniswapV3Pools[uniswapV3Pools[i].identifier] =
+                UniswapV3Pool(uniswapV3Pools[i].identifier, uniswapV3Pools[i].poolAddress, uniswapV3Pools[i].fee);
+        }
+
         // Set the initial state variables.
         s_creator = msg.sender;
-        s_maxSwap = initialMaxSwap;
+        s_slippageTolerance = initialSlippageTolerance;
 
         emit SimpleSwapInitialized(msg.sender);
         // Directly store the block number of the initialization event.
