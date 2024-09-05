@@ -4,6 +4,8 @@ pragma solidity 0.8.26;
 import {console} from "forge-std/Test.sol";
 import {SimpleSwapTestSetup} from "./SimpleSwapTestSetup.t.sol";
 
+import {ISimpleSwap} from "src/interfaces/ISimpleSwap.sol";
+
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import {Address} from "@openzeppelin/contracts/utils/Address.sol";
@@ -14,6 +16,13 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 contract SimpleSwapTests is SimpleSwapTestSetup {
     // Library directives
     using Address for address payable;
+
+    function test_SwapZeroETH() public {
+        vm.startPrank(owner1);
+        vm.expectRevert(ISimpleSwap.SimpleSwap__SwapAmountInZero.selector);
+        payable(address(simpleSwap)).sendValue(0);
+        vm.stopPrank();
+    }
 
     function test_SwapUSDC() public {
         address USDCAddress = simpleSwap.getTokenAddress("USDC");
@@ -47,5 +56,11 @@ contract SimpleSwapTests is SimpleSwapTestSetup {
             ETHBalanceAfterSwap - ETHBalanceBeforeSwap == amountOut,
             "ETH balance did not increase by the correct amount"
         );
+    }
+
+    function test_CoverageForFallbackFunction() public {
+        vm.prank(owner1);
+        vm.expectRevert(ISimpleSwap.SimpleSwap__FunctionDoesNotExist.selector);
+        payable(address(simpleSwap)).functionCallWithValue("FunctionThatDoesNotExist", SEND_VALUE);
     }
 }

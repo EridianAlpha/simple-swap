@@ -17,7 +17,6 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 // Interface Imports
 import {IWETH9} from "./interfaces/IWETH9.sol";
 import {IERC20Extended} from "./interfaces/IERC20Extended.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ITokenSwapCalcsModule} from "./interfaces/ITokenSwapCalcsModule.sol";
 
 // Uniswap Imports
@@ -34,6 +33,7 @@ contract SimpleSwap is Core {
 
     /// @notice Function to receive ETH when no msg.data is sent.
     /// @dev Calls the swapTokens function with ETH as the input token and automatically swaps it to USDC.
+    ///      Ignores ETH sent from the WETH contract to avoid loops when unwrapping WETH.
     receive() external payable {
         if (msg.sender != address(getTokenAddress("WETH"))) {
             swapTokens("USDC/ETH", "ETH", "USDC", msg.value);
@@ -47,13 +47,8 @@ contract SimpleSwap is Core {
 
     /// @notice Function to swap USDC to ETH.
     function swapUSDC(uint256 _value) external returns (uint256 amountOut) {
-        uint256 USDCBalanceBeforeSwap = IERC20(getTokenAddress("USDC")).balanceOf(address(this));
-
-        IERC20(getTokenAddress("USDC")).transferFrom(msg.sender, address(this), _value);
+        IERC20Extended(getTokenAddress("USDC")).transferFrom(msg.sender, address(this), _value);
         amountOut = swapTokens("USDC/ETH", "USDC", "ETH", _value);
-
-        uint256 USDCBalanceAfterSwap = IERC20(getTokenAddress("USDC")).balanceOf(address(this));
-        require(USDCBalanceBeforeSwap == USDCBalanceAfterSwap, SimpleSwap__USDCSwapFailed());
     }
 
     /// @notice Function to swap tokens using UniswapV3.
@@ -63,10 +58,12 @@ contract SimpleSwap is Core {
         string memory _tokenOutIdentifier,
         uint256 _amountIn
     ) internal returns (uint256 amountOut) {
+        require(_amountIn > 0, SimpleSwap__SwapAmountInZero());
+
         (address uniswapV3PoolAddress, uint24 uniswapV3PoolFee) = getUniswapV3Pool(_uniswapV3PoolIdentifier);
 
-        // If the input is ETH, wrap any ETH to WETH.
-        if (_isIdentifierETH(_tokenInIdentifier) && getBalance("ETH") > 0) {
+        // If the input is ETH, wrap ETH to WETH.
+        if (_isIdentifierETH(_tokenInIdentifier)) {
             IWETH9(getTokenAddress("WETH")).deposit{value: _amountIn}();
         }
 
@@ -98,13 +95,11 @@ contract SimpleSwap is Core {
         TransferHelper.safeApprove(params.tokenIn, address(swapRouter), _amountIn);
         amountOut = swapRouter.exactInputSingle(params);
 
-        // If the output token was WETH, unwrap the WETH to ETH and send it to the recipient.
+        // If the output token is WETH, unwrap the WETH to ETH and send it to the msg.sender.
         if (Strings.equal(_tokenOutIdentifier, "WETH")) {
             IWETH9(getTokenAddress("WETH")).withdraw(amountOut);
             payable(address(msg.sender)).sendValue(amountOut);
         }
-
-        return (amountOut);
     }
 
     /// @notice Checks if the identifier is for ETH.

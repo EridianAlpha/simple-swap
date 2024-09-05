@@ -7,8 +7,8 @@ interface ISimpleSwap {
     // ================================================================
     // │                            ERRORS                            │
     // ================================================================
-    error SimpleSwap__USDCSwapFailed();
     error SimpleSwap__NoEthToWithdraw();
+    error SimpleSwap__SwapAmountInZero();
     error SimpleSwap__ZeroBorrowAmount();
     error SimpleSwap__MaxSwapUnchanged();
     error SimpleSwap__WithdrawEthFailed();
