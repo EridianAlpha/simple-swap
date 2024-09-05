@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.26;
+pragma solidity 0.8.27;
 
 import {Test, console} from "forge-std/Test.sol";
 import {IAccessControl} from "@openzeppelin/contracts/access/IAccessControl.sol";
@@ -21,8 +21,6 @@ contract SimpleSwapTestSetup is Test, SimpleSwap {
 
     SimpleSwap simpleSwap;
     SimpleSwapInternalFunctionsHelper simpleSwapInternalFunctionsHelper;
-
-    NetworkHelper.NetworkConfig simpleSwapNetworkConfig;
 
     // Setup testing constants
     uint256 internal constant GAS_PRICE = 1;
@@ -55,7 +53,29 @@ contract SimpleSwapTestSetup is Test, SimpleSwap {
         contractCreator = msgSender;
 
         simpleSwap = SimpleSwap(payable(address(simpleSwapProxy)));
-        simpleSwapNetworkConfig = _simpleSwapNetworkConfig;
+
+        // Convert the contractAddresses array to a mapping.
+        for (uint256 i = 0; i < _simpleSwapNetworkConfig.contractAddresses.length; i++) {
+            s_contractAddresses[_simpleSwapNetworkConfig.contractAddresses[i].identifier] =
+                _simpleSwapNetworkConfig.contractAddresses[i].contractAddress;
+        }
+
+        // Convert the tokenAddresses array to a mapping.
+        for (uint256 i = 0; i < _simpleSwapNetworkConfig.tokenAddresses.length; i++) {
+            s_tokenAddresses[_simpleSwapNetworkConfig.tokenAddresses[i].identifier] =
+                _simpleSwapNetworkConfig.tokenAddresses[i].tokenAddress;
+        }
+
+        // Convert the uniswapV3Pools array to a mapping.
+        for (uint256 i = 0; i < _simpleSwapNetworkConfig.uniswapV3Pools.length; i++) {
+            s_uniswapV3Pools[_simpleSwapNetworkConfig.uniswapV3Pools[i].identifier] = UniswapV3Pool(
+                _simpleSwapNetworkConfig.uniswapV3Pools[i].identifier,
+                _simpleSwapNetworkConfig.uniswapV3Pools[i].poolAddress,
+                _simpleSwapNetworkConfig.uniswapV3Pools[i].fee
+            );
+        }
+
+        s_slippageTolerance = _simpleSwapNetworkConfig.initialSlippageTolerance;
 
         simpleSwapInternalFunctionsHelper =
             SimpleSwapInternalFunctionsHelper(payable(address(simpleSwapInternalFunctionsHelperProxy)));

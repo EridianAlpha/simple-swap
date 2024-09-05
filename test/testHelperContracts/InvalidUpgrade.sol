@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.26;
+pragma solidity 0.8.27;
 
 /// @notice This contract is used to test UUPS upgrade to an invalid contract.
 /// @dev The contact is not a valid upgradeable contract so the upgrade should fail.

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.26;
+pragma solidity 0.8.27;
 
 // ... ➜ ModifiersAndChecks ➜ *Updates* ➜ Core ➜ ...
 
@@ -61,13 +61,13 @@ abstract contract Updates is ModifiersAndChecks {
     /// @param _slippageTolerance The new Slippage Tolerance.
     function updateSlippageTolerance(uint16 _slippageTolerance) external onlyRole(OWNER_ROLE) {
         // Should be different from the current s_slippageTolerance
-        require (s_slippageTolerance != _slippageTolerance, SimpleSwap__SlippageToleranceUnchanged());
+        require(s_slippageTolerance != _slippageTolerance, SimpleSwap__SlippageToleranceUnchanged());
 
         // New _slippageTolerance must be greater than the SLIPPAGE_TOLERANCE_MAXIMUM.
         // The calculation for slippage tolerance to percentage is 100 / _slippageTolerance,
         // so a higher value means a lower tolerance.
         // Failsafe to prevent terrible trades occurring due to a high slippage tolerance.
-        require (_slippageTolerance >= SLIPPAGE_TOLERANCE_MAXIMUM, SimpleSwap__SlippageToleranceAboveMaximum());
+        require(_slippageTolerance >= SLIPPAGE_TOLERANCE_MAXIMUM, SimpleSwap__SlippageToleranceAboveMaximum());
 
         emit SlippageToleranceUpdated(s_slippageTolerance, _slippageTolerance);
         _storeEventBlockNumber();

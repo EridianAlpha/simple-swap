@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.26;
+pragma solidity 0.8.27;
 
 import {console} from "forge-std/Test.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
@@ -41,25 +41,22 @@ contract SimpleSwapGetterTests is SimpleSwapTestSetup {
     }
 
     function test_GetTokenAddress() public view {
-        assertEq(simpleSwap.getTokenAddress("USDC"), simpleSwapNetworkConfig.tokenAddresses[1].tokenAddress);
+        assertEq(simpleSwap.getTokenAddress("USDC"), s_tokenAddresses["USDC"]);
     }
 
     function test_GetContractAddress() public view {
-        assertEq(
-            simpleSwap.getContractAddress("uniswapV3Router"),
-            simpleSwapNetworkConfig.contractAddresses[0].contractAddress
-        );
+        assertEq(simpleSwap.getContractAddress("uniswapV3Router"), s_contractAddresses["uniswapV3Router"]);
     }
 
     function test_GetUniswapV3Pool() public view {
         (address poolAddress, uint24 fee) = simpleSwap.getUniswapV3Pool("USDC/ETH");
 
-        assertEq(poolAddress, simpleSwapNetworkConfig.uniswapV3Pools[0].poolAddress);
-        assertEq(fee, simpleSwapNetworkConfig.uniswapV3Pools[0].fee);
+        assertEq(poolAddress, s_uniswapV3Pools["USDC/ETH"].poolAddress);
+        assertEq(fee, s_uniswapV3Pools["USDC/ETH"].fee);
     }
 
     function test_GetSlippageTolerance() public view {
-        assertEq(simpleSwap.getSlippageTolerance(), simpleSwapNetworkConfig.initialSlippageTolerance);
+        assertEq(simpleSwap.getSlippageTolerance(), s_slippageTolerance);
     }
 
     function test_GetSlippageToleranceMaximum() public view {

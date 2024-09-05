@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.26;
+pragma solidity 0.8.27;
 
 /// @title SimpleSwap Interface
 /// @notice This interface defines the essential structures and functions for the SimpleSwap contract.
