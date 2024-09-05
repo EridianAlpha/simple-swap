@@ -56,6 +56,14 @@ contract Interactions is GetDeployedContract {
         return version;
     }
 
+    function getSlippageTolerance() public returns (uint256 slippageTolerance) {
+        vm.startBroadcast();
+        interactionsSetup();
+        slippageTolerance = simpleSwap.getSlippageTolerance();
+        vm.stopBroadcast();
+        return slippageTolerance;
+    }
+
     // ================================================================
     // │                          ETH & TOKENS                        │
     // ================================================================
