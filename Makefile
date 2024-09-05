@@ -189,6 +189,15 @@ sendETH: get-network-args \
 	sendETH-script \
 	remove-value
 
+# Swap USDC script
+swapUSDC-script:; $(interactions-script) --sig "swapUSDC(uint256)" ${MAKE_CLI_INPUT_VALUE}
+swapUSDC: get-network-args \
+	ask-for-value \
+	convert-value-to-USDC \
+	store-value \
+	swapUSDC-script \
+	remove-value
+
 # Get contract ETH balance script
 getBalance-script:; $(interactions-script) --sig "getBalance()"
 getBalance: get-network-args \

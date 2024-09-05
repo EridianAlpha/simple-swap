@@ -6,15 +6,18 @@ pragma solidity 0.8.26;
 // ================================================================
 // │                           IMPORTS                            │
 // ================================================================
+
 // Inherited Contract Imports
 import {Core} from "./Core.sol";
 
-// Using for Library Attachment Imports
+// Using for Library Directive Imports
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
+import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 // Interface Imports
 import {IWETH9} from "./interfaces/IWETH9.sol";
 import {IERC20Extended} from "./interfaces/IERC20Extended.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ITokenSwapCalcsModule} from "./interfaces/ITokenSwapCalcsModule.sol";
 
 // Uniswap Imports
@@ -25,12 +28,16 @@ import {TransferHelper} from "@uniswap/v3-periphery/contracts/libraries/Transfer
 /// @notice This logic contract has all the custom logic for the SimpleSwap contract.
 /// @dev This contract accepts ETH, swaps it to USDC using UniswapV3 and returns the USDC to the sender.
 contract SimpleSwap is Core {
+    // Library directives
     using Strings for string;
+    using Address for address payable;
 
     /// @notice Function to receive ETH when no msg.data is sent.
     /// @dev Calls the swapTokens function with ETH as the input token and automatically swaps it to USDC.
     receive() external payable {
-        swapTokens("USDC/ETH", "ETH", "USDC");
+        if (msg.sender != address(getTokenAddress("WETH"))) {
+            swapTokens("USDC/ETH", "ETH", "USDC", msg.value);
+        }
     }
 
     /// @notice Revert calls to functions that do not exist.
@@ -38,17 +45,29 @@ contract SimpleSwap is Core {
         revert SimpleSwap__FunctionDoesNotExist();
     }
 
+    /// @notice Function to swap USDC to ETH.
+    function swapUSDC(uint256 _value) external returns (uint256 amountOut) {
+        uint256 USDCBalanceBeforeSwap = IERC20(getTokenAddress("USDC")).balanceOf(address(this));
+
+        IERC20(getTokenAddress("USDC")).transferFrom(msg.sender, address(this), _value);
+        amountOut = swapTokens("USDC/ETH", "USDC", "ETH", _value);
+
+        uint256 USDCBalanceAfterSwap = IERC20(getTokenAddress("USDC")).balanceOf(address(this));
+        require(USDCBalanceBeforeSwap == USDCBalanceAfterSwap, SimpleSwap__USDCSwapFailed());
+    }
+
     /// @notice Function to swap tokens using UniswapV3.
     function swapTokens(
         string memory _uniswapV3PoolIdentifier,
         string memory _tokenInIdentifier,
-        string memory _tokenOutIdentifier
+        string memory _tokenOutIdentifier,
+        uint256 _amountIn
     ) internal returns (uint256 amountOut) {
         (address uniswapV3PoolAddress, uint24 uniswapV3PoolFee) = getUniswapV3Pool(_uniswapV3PoolIdentifier);
 
         // If the input is ETH, wrap any ETH to WETH.
         if (_isIdentifierETH(_tokenInIdentifier) && getBalance("ETH") > 0) {
-            wrapETHToWETH();
+            IWETH9(getTokenAddress("WETH")).deposit{value: _amountIn}();
         }
 
         // If ETH is input or output, convert the identifier to WETH.
@@ -59,19 +78,16 @@ contract SimpleSwap is Core {
         address tokenInAddress = getTokenAddress(_tokenInIdentifier);
         address tokenOutAddress = getTokenAddress(_tokenOutIdentifier);
 
-        // Get the current balance of the input token.
-        uint256 currentBalance = getBalance(_tokenInIdentifier);
-
         // Prepare the swap parameters
         IV3SwapRouter.ExactInputSingleParams memory params = IV3SwapRouter.ExactInputSingleParams({
             tokenIn: tokenInAddress,
             tokenOut: tokenOutAddress,
             fee: uniswapV3PoolFee,
-            recipient: msg.sender,
+            recipient: Strings.equal(_tokenOutIdentifier, "WETH") ? address(this) : msg.sender,
             // deadline: block.timestamp,
-            amountIn: currentBalance,
+            amountIn: _amountIn,
             amountOutMinimum: ITokenSwapCalcsModule(getContractAddress("tokenSwapCalcsModule")).uniswapV3CalculateMinOut(
-                currentBalance, uniswapV3PoolAddress, tokenOutAddress, s_slippageTolerance
+                _amountIn, uniswapV3PoolAddress, tokenOutAddress, s_slippageTolerance
             ),
             sqrtPriceLimitX96: 0 // TODO: Calculate price limit
         });
@@ -79,8 +95,15 @@ contract SimpleSwap is Core {
         IV3SwapRouter swapRouter = IV3SwapRouter(getContractAddress("uniswapV3Router"));
 
         // Approve the swapRouter to spend the tokenIn and swap the tokens.
-        TransferHelper.safeApprove(params.tokenIn, address(swapRouter), currentBalance);
+        TransferHelper.safeApprove(params.tokenIn, address(swapRouter), _amountIn);
         amountOut = swapRouter.exactInputSingle(params);
+
+        // If the output token was WETH, unwrap the WETH to ETH and send it to the recipient.
+        if (Strings.equal(_tokenOutIdentifier, "WETH")) {
+            IWETH9(getTokenAddress("WETH")).withdraw(amountOut);
+            payable(address(msg.sender)).sendValue(amountOut);
+        }
+
         return (amountOut);
     }
 
@@ -90,11 +113,5 @@ contract SimpleSwap is Core {
     /// @return isETH True if the identifier is for ETH.
     function _isIdentifierETH(string memory _identifier) internal pure returns (bool) {
         return (Strings.equal(_identifier, "ETH")) ? true : false;
-    }
-
-    /// @notice Wraps all ETH in the contract to WETH.
-    /// @dev Wraps all ETH in the contract to WETH even if the amount is 0.
-    function wrapETHToWETH() internal {
-        IWETH9(getTokenAddress("WETH")).deposit{value: address(this).balance}();
     }
 }

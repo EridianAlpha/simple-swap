@@ -15,6 +15,9 @@ import {SimpleSwap} from "src/SimpleSwap.sol";
 // Library Directive Imports
 import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
+// Interface Imports
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 // ================================================================
 // │                         INTERACTIONS                         │
 // ================================================================
@@ -67,10 +70,26 @@ contract Interactions is GetDeployedContract {
     // ================================================================
     // │                          ETH & TOKENS                        │
     // ================================================================
-    function sendETH(uint256 value) public {
+    function sendETH(uint256 _value) public {
         interactionsSetup();
         vm.startBroadcast();
-        payable(address(simpleSwap)).sendValue(value);
+        uint256 USDCBalanceBefore = IERC20(simpleSwap.getTokenAddress("USDC")).balanceOf(address(msg.sender));
+        payable(address(simpleSwap)).sendValue(_value);
+        uint256 USDCBalanceAfter = IERC20(simpleSwap.getTokenAddress("USDC")).balanceOf(address(msg.sender));
+        console.log("ETH Swapped:   ", _value);
+        console.log("USDC Received: ", USDCBalanceAfter - USDCBalanceBefore);
+        vm.stopBroadcast();
+    }
+
+    function swapUSDC(uint256 _value) public {
+        interactionsSetup();
+        vm.startBroadcast();
+        uint256 ETHBalanceBefore = address(msg.sender).balance;
+        IERC20(simpleSwap.getTokenAddress("USDC")).approve(address(simpleSwap), _value);
+        simpleSwap.swapUSDC(_value);
+        uint256 ETHBalanceAfter = address(msg.sender).balance;
+        console.log("USDC Swapped: ", _value);
+        console.log("ETH Received: ", ETHBalanceAfter - ETHBalanceBefore);
         vm.stopBroadcast();
     }
 
@@ -81,27 +100,27 @@ contract Interactions is GetDeployedContract {
     // ================================================================
     // │                  FUNCTIONS - ROLE MANAGEMENT                 │
     // ================================================================
-    function getRoleMembers(string memory roleString) public returns (address[] memory) {
+    function getRoleMembers(string memory _roleString) public returns (address[] memory) {
         vm.startBroadcast();
         interactionsSetup();
-        address[] memory members = simpleSwap.getRoleMembers(roleString);
+        address[] memory members = simpleSwap.getRoleMembers(_roleString);
         vm.stopBroadcast();
         return members;
     }
 
-    function grantRole(string memory roleString, address account) public {
-        bytes32 roleBytes = keccak256(abi.encodePacked(roleString));
+    function grantRole(string memory _roleString, address _account) public {
+        bytes32 roleBytes = keccak256(abi.encodePacked(_roleString));
         interactionsSetup();
         vm.startBroadcast();
-        simpleSwap.grantRole(roleBytes, account);
+        simpleSwap.grantRole(roleBytes, _account);
         vm.stopBroadcast();
     }
 
-    function revokeRole(string memory roleString, address account) public {
-        bytes32 roleBytes = keccak256(abi.encodePacked(roleString));
+    function revokeRole(string memory _roleString, address _account) public {
+        bytes32 roleBytes = keccak256(abi.encodePacked(_roleString));
         interactionsSetup();
         vm.startBroadcast();
-        simpleSwap.revokeRole(roleBytes, account);
+        simpleSwap.revokeRole(roleBytes, _account);
         vm.stopBroadcast();
     }
 }

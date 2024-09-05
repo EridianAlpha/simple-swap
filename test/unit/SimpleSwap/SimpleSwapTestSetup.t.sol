@@ -28,7 +28,7 @@ contract SimpleSwapTestSetup is Test, SimpleSwap {
     uint256 internal constant GAS_PRICE = 1;
     uint256 internal constant STARTING_BALANCE = 10 ether;
     uint256 internal constant SEND_VALUE = 1 ether;
-    uint256 internal constant USDC_BORROW_AMOUNT = 100000000; // 100 USDC in 1e6 scale
+    uint256 internal constant USDC_SWAP_AMOUNT = 100000000; // 100 USDC in 1e6 scale
     uint16 internal constant SLIPPAGE_TOLERANCE_INCREMENT = 100;
     string internal constant UPGRADE_EXAMPLE_VERSION = "9.9.9";
 

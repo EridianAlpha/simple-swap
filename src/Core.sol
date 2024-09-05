@@ -116,7 +116,10 @@ contract Core is Updates {
     ///      Stores the block number of the event.
     /// @param _identifier The identifier of the token to withdraw.
     /// @param _withdrawAddress The address to send the withdrawn tokens to. Must have `OWNER_ROLE`.
-    function withdrawTokens(string memory _identifier, address _withdrawAddress) public checkOwner(_withdrawAddress) {
+    function withdrawTokens(string memory _identifier, address _withdrawAddress)
+        external
+        checkOwner(_withdrawAddress)
+    {
         // Checks
         uint256 tokenBalance = IERC20(s_tokenAddresses[_identifier]).balanceOf(address(this));
         require(tokenBalance > 0, SimpleSwap__NoTokensToWithdraw());
@@ -143,7 +146,7 @@ contract Core is Updates {
     /// @dev Caller must have `OWNER_ROLE`.
     /// @param newImplementation Address of the new contract implementation.
     /// @param data Data to send to the new implementation.
-    function upgradeContract(address newImplementation, bytes memory data) public payable {
+    function upgradeContract(address newImplementation, bytes memory data) external payable {
         // This is the keccak-256 hash of "eip1967.proxy.implementation" subtracted by 1
         bytes32 slot = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
         address previousImplementation;
