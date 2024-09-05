@@ -64,11 +64,11 @@ test-v:; forge test --fork-url ${FORK_RPC_URL} -vvvv
 test-summary:; forge test --fork-url ${FORK_RPC_URL} --summary
 
 coverage:
-	@forge coverage --ir-minimum --fork-url ${FORK_RPC_URL} --report summary --report lcov 
+	@forge coverage --fork-url ${FORK_RPC_URL} --report summary --report lcov 
 	@echo
 
 coverage-report:
-	@forge coverage --ir-minimum --fork-url ${FORK_RPC_URL} --report debug > coverage-report.txt
+	@forge coverage --fork-url ${FORK_RPC_URL} --report debug > coverage-report.txt
 	@echo Output saved to coverage-report.txt
 
 # ================================================================
