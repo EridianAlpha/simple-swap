@@ -67,7 +67,7 @@ contract SimpleSwap is Core {
             IWETH9(getTokenAddress("WETH")).deposit{value: _amountIn}();
         }
 
-        // If ETH is input or output, convert the identifier to WETH.
+        // If ETH is input or output, change the identifier to WETH.
         _tokenInIdentifier = _isIdentifierETH(_tokenInIdentifier) ? "WETH" : _tokenInIdentifier;
         _tokenOutIdentifier = _isIdentifierETH(_tokenOutIdentifier) ? "WETH" : _tokenOutIdentifier;
 
