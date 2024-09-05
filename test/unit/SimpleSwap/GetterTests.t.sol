@@ -4,7 +4,7 @@ pragma solidity 0.8.27;
 import {console} from "forge-std/Test.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {SimpleSwapTestSetup} from "./SimpleSwapTestSetup.t.sol";
+import {SimpleSwapTestSetup} from "./TestSetup.t.sol";
 
 import {ISimpleSwap} from "../../../src/interfaces/ISimpleSwap.sol";
 import {SimpleSwap} from "../../../src/SimpleSwap.sol";

@@ -2,7 +2,7 @@
 pragma solidity 0.8.27;
 
 import {console} from "forge-std/Test.sol";
-import {SimpleSwapTestSetup} from "./SimpleSwapTestSetup.t.sol";
+import {SimpleSwapTestSetup} from "./TestSetup.t.sol";
 
 import {ISimpleSwap} from "src/interfaces/ISimpleSwap.sol";
 

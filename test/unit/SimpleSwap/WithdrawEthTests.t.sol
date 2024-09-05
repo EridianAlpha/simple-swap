@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.27;
 
-import {SimpleSwapTestSetup} from "test/unit/SimpleSwap/SimpleSwapTestSetup.t.sol";
+import {SimpleSwapTestSetup} from "test/unit/SimpleSwap/TestSetup.t.sol";
 
 import {ISimpleSwap} from "src/interfaces/ISimpleSwap.sol";
 import {InvalidOwner} from "test/testHelperContracts/InvalidOwner.sol";
