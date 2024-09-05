@@ -87,7 +87,8 @@ contract Core is Updates {
 
     /// @notice Withdraw all ETH from the contract.
     /// @dev This function is intended for emergency use.
-    ///      In normal operation, the contract shouldn't hold ETH,
+    ///      In normal operation, the contract should not hold ETH,
+    ///      This function can be called by anyone.
     ///      The use of nonReentrant is not required due to the `withdrawAddress` check for the `OWNER_ROLE`
     ///      and it drains 100% of the ETH balance anyway.
     ///      Throws `SimpleSwap__NoEthToWithdraw` if there is no ETH to withdraw.

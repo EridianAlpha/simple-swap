@@ -61,13 +61,13 @@ abstract contract Updates is ModifiersAndChecks {
     /// @param _slippageTolerance The new Slippage Tolerance.
     function updateSlippageTolerance(uint16 _slippageTolerance) external onlyRole(OWNER_ROLE) {
         // Should be different from the current s_slippageTolerance
-        if (s_slippageTolerance == _slippageTolerance) revert SimpleSwap__SlippageToleranceUnchanged();
+        require (s_slippageTolerance != _slippageTolerance, SimpleSwap__SlippageToleranceUnchanged());
 
         // New _slippageTolerance must be greater than the SLIPPAGE_TOLERANCE_MAXIMUM.
         // The calculation for slippage tolerance to percentage is 100 / _slippageTolerance,
         // so a higher value means a lower tolerance.
         // Failsafe to prevent terrible trades occurring due to a high slippage tolerance.
-        if (_slippageTolerance < SLIPPAGE_TOLERANCE_MAXIMUM) revert SimpleSwap__SlippageToleranceAboveMaximum();
+        require (_slippageTolerance >= SLIPPAGE_TOLERANCE_MAXIMUM, SimpleSwap__SlippageToleranceAboveMaximum());
 
         emit SlippageToleranceUpdated(s_slippageTolerance, _slippageTolerance);
         _storeEventBlockNumber();
