@@ -14,8 +14,6 @@ help:
 # ================================================================
 get-network-args: $(word 2, $(MAKECMDGOALS))-network
 
-# TODO: Just keep anvil and holesky for this project as it's dev only. Move the other networks to the template project
-
 anvil: # Added to stop error output when running commands e.g. make deploy anvil
 	@echo
 anvil-network:
@@ -32,17 +30,6 @@ holesky-network:
 		NETWORK_ARGS := --broadcast \
 						--rpc-url ${HOLESKY_RPC_URL} \
 						--private-key ${HOLESKY_PRIVATE_KEY} \
-						--verify \
-						--etherscan-api-key ${ETHERSCAN_API_KEY} \
-	)
-
-eth-mainnet: # Added to stop error output when running commands e.g. make deploy eth-mainnet
-	@echo
-eth-mainnet-network:
-	$(eval \
-		NETWORK_ARGS := --broadcast \
-						--rpc-url ${ETH_MAINNET_RPC_URL} \
-						--private-key ${ETH_MAINNET_PRIVATE_KEY} \
 						--verify \
 						--etherscan-api-key ${ETHERSCAN_API_KEY} \
 	)
@@ -220,7 +207,7 @@ getVersion-script:; $(interactions-script) --sig "getVersion()"
 getVersion: get-network-args \
 	getVersion-script
 
-# Get max swap script
-getMaxSwap-script:; $(interactions-script) --sig "getMaxSwap()"
-getMaxSwap: get-network-args \
-	getMaxSwap-script
+# Get slippage tolerance script
+getSlippageTolerance-script:; $(interactions-script) --sig "getSlippageTolerance()"
+getSlippageTolerance: get-network-args \
+	getSlippageTolerance-script
