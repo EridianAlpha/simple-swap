@@ -11,7 +11,7 @@ import {GetDeployedContract} from "script/GetDeployedContract.s.sol";
 
 // Contract Imports
 import {SimpleSwap} from "src/SimpleSwap.sol";
-import {ForceSendEth} from "test/testHelperContracts/ForceSendEth.sol";
+import {ForceSendEth} from "../test/testHelperContracts/ForceSendEth.sol";
 
 // Library Directive Imports
 import {Address} from "@openzeppelin/contracts/utils/Address.sol";
