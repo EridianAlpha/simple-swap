@@ -4,8 +4,8 @@ pragma solidity 0.8.27;
 import {SimpleSwapTestSetup} from "test/unit/SimpleSwap/TestSetup.t.sol";
 
 import {ISimpleSwap} from "src/interfaces/ISimpleSwap.sol";
-import {InvalidOwner} from "test/testHelperContracts/InvalidOwner.sol";
-import {ForceSendEth} from "test/testHelperContracts/ForceSendEth.sol";
+import {InvalidOwner} from "../../testHelperContracts/InvalidOwner.sol";
+import {ForceSendEth} from "../../testHelperContracts/ForceSendEth.sol";
 
 import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
