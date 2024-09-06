@@ -48,6 +48,7 @@
     - [7.7.5. Get Contract Address](#775-get-contract-address)
     - [7.7.6. Get Token Address](#776-get-token-address)
     - [7.7.7. Get Uniswap V3 Pool](#777-get-uniswap-v3-pool)
+    - [7.7.8. Get Module Version](#778-get-module-version)
 - [8. Build and Deploy Documentation](#8-build-and-deploy-documentation)
 - [9. License](#9-license)
 
@@ -514,6 +515,18 @@ Returns the address and fee of the specified identifier.
 | Holesky      | `make getUniswapV3Pool holesky`      |
 | Base Sepolia | `make getUniswapV3Pool base-sepolia` |
 | Base Mainnet | `make getUniswapV3Pool base-mainnet` |
+
+#### 7.7.8. Get Module Version
+
+Input value as a module identifier e.g. `tokenSwapCalcsModule`.
+Returns the version of the specified module.
+
+| Chain        | Command                              |
+| ------------ | ------------------------------------ |
+| Anvil        | `make getModuleVersion anvil`        |
+| Holesky      | `make getModuleVersion holesky`      |
+| Base Sepolia | `make getModuleVersion base-sepolia` |
+| Base Mainnet | `make getModuleVersion base-mainnet` |
 
 ## 8. Build and Deploy Documentation
 

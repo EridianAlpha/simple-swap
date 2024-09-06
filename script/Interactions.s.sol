@@ -19,6 +19,9 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 // Interface Imports
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+// Import Modules
+import {TokenSwapCalcsModule} from "src/modules/TokenSwapCalcsModule.sol";
+
 // ================================================================
 // │                         INTERACTIONS                         │
 // ================================================================
@@ -89,21 +92,18 @@ contract Interactions is GetDeployedContract {
     // ================================================================
     // │                            UPGRADES                          │
     // ================================================================
-    // TODO: Implement upgrade function
     function upgrade() public {
         interactionsSetup();
         vm.startBroadcast();
-        // AavePM newAavePM = new AavePM();
-        // aavePM.upgradeToAndCall(address(newAavePM), "");
+        // Deploy new implementation contract
+        SimpleSwap newSimpleSwapImplementation = new SimpleSwap();
 
-        // // Deploy updated modules
-        // aavePM.updateContractAddress("tokenSwapsModule", address(new TokenSwapsModule(address(aavePM))));
-        // aavePM.updateContractAddress("aaveFunctionsModule", address(new AaveFunctionsModule(address(aavePM))));
-        // aavePM.updateContractAddress(
-        //     "borrowAndWithdrawUsdcModule", address(new BorrowAndWithdrawUsdcModule(address(aavePM)))
-        // );
-        // aavePM.updateContractAddress("rebalanceModule", address(new RebalanceModule(address(aavePM))));
-        // aavePM.updateContractAddress("reinvestModule", address(new ReinvestModule(address(aavePM))));
+        // Upgrade to new implementation contract
+        simpleSwap.upgradeToAndCall(address(newSimpleSwapImplementation), "");
+
+        // Deploy new modules
+        simpleSwap.updateContractAddress("tokenSwapCalcsModule", address(new TokenSwapCalcsModule()));
+
         vm.stopBroadcast();
     }
 
@@ -259,6 +259,20 @@ contract Interactions is GetDeployedContract {
         vm.startBroadcast();
         interactionsSetup();
         slippageTolerance = simpleSwap.getSlippageTolerance();
+        vm.stopBroadcast();
+    }
+
+    function getModuleVersion(string memory _identifier) public returns (string memory moduleVersion) {
+        vm.startBroadcast();
+        interactionsSetup();
+        address moduleAddress = simpleSwap.getContractAddress(_identifier);
+
+        (bool success, bytes memory data) = moduleAddress.call(abi.encodeWithSignature("VERSION()"));
+
+        if (success) {
+            moduleVersion = abi.decode(data, (string));
+        }
+
         vm.stopBroadcast();
     }
 }

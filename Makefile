@@ -333,3 +333,10 @@ getUniswapV3Pool: get-network-args \
 getSlippageTolerance-script:; $(interactions-script) --sig "getSlippageTolerance()"
 getSlippageTolerance: get-network-args \
 	getSlippageTolerance-script
+
+getModuleVersion-script:; $(interactions-script) --sig "getModuleVersion(string)" ${MAKE_CLI_INPUT_VALUE}
+getModuleVersion: get-network-args \
+	ask-for-value \
+	store-value \
+	getModuleVersion-script \
+	remove-value
