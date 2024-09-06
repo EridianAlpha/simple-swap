@@ -184,6 +184,12 @@ Interactions are defined in `./script/Interactions.s.sol`
 If `DEPLOYED_CONTRACT_ADDRESS` is set in the `.env` file, that contract address will be used for interactions.
 If that variable is not set, the latest deployment on the specified chain will be used.
 
+Deployed Contracts:
+
+- SimpleSwap: [0xB48feaDA85be6e061ba1D2FF36633C99fe50C0DA](https://basescan.org/address/0xB48feaDA85be6e061ba1D2FF36633C99fe50C0DA)
+- ERC1967Proxy: [0xea5f4F00f29d97cd3F340e66b80EdbD737ae29ae](https://basescan.org/address/0xea5f4F00f29d97cd3F340e66b80EdbD737ae29ae)
+- TokenSwapCalcsModule: [0x4B68D4b25d7B484b4a10D88d2c83308831c980B1](https://basescan.org/address/0x4B68D4b25d7B484b4a10D88d2c83308831c980B1)
+
 ### 7.1. Force Send ETH
 
 Send ETH to the contract using a intermediate selfdestruct contract.
