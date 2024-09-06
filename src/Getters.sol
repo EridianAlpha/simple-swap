@@ -22,12 +22,6 @@ abstract contract Getters is Variables {
         return s_creator;
     }
 
-    /// @notice Public getter function to get the block numbers of all the contract events.
-    /// @return eventBlockNumbers The array of event block numbers.
-    function getEventBlockNumbers() public view returns (uint64[] memory eventBlockNumbers) {
-        return s_eventBlockNumbers;
-    }
-
     /// @notice Public getter function to get the contract version.
     /// @return version The contract version.
     function getVersion() public pure returns (string memory version) {
@@ -43,6 +37,12 @@ abstract contract Getters is Variables {
         } else {
             return balance = IERC20(s_tokenAddresses[_identifier]).balanceOf(address(this));
         }
+    }
+
+    /// @notice Public getter function to get the block numbers of all the contract events.
+    /// @return eventBlockNumbers The array of event block numbers.
+    function getEventBlockNumbers() public view returns (uint64[] memory eventBlockNumbers) {
+        return s_eventBlockNumbers;
     }
 
     /// @notice Public getter function to get the contract address for a given identifier.

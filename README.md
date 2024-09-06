@@ -42,7 +42,12 @@
     - [7.6.8. Renounce Role](#768-renounce-role)
   - [7.7. Getters](#77-getters)
     - [7.7.1. Get Creator](#771-get-creator)
-    - [7.7.2. Get Balance](#772-get-balance)
+    - [7.7.2. Get Version](#772-get-version)
+    - [7.7.3. Get Balance](#773-get-balance)
+    - [7.7.4. Get Event Block Numbers](#774-get-event-block-numbers)
+    - [7.7.5. Get Contract Address](#775-get-contract-address)
+    - [7.7.6. Get Token Address](#776-get-token-address)
+    - [7.7.7. Get Uniswap V3 Pool](#777-get-uniswap-v3-pool)
 - [8. Build and Deploy Documentation](#8-build-and-deploy-documentation)
 - [9. License](#9-license)
 
@@ -69,14 +74,15 @@ The TokenSwap contract is a pure logic contract that can be used to swap ETH <->
 
 | Function | Restrictions | Description                            |
 | -------- | ------------ | -------------------------------------- |
+| receive  | `N/A`        | Receive ETH and swap for USDC.         |
 | swapUsdc | `N/A`        | Swap specified amount of USDC for ETH. |
 
 ### 3.2. Withdraw Functions
 
-| Function       | Restrictions | Description                                                   |
-| -------------- | ------------ | ------------------------------------------------------------- |
-| withdrawEth    | `N/A`        | Withdraw any ETH in the contract to an owner address.         |
-| withdrawTokens | `N/A`        | Withdraw specified token in the contract to an owner address. |
+| Function       | Restrictions            | Description                                                   |
+| -------------- | ----------------------- | ------------------------------------------------------------- |
+| withdrawEth    | `Only To Owner Address` | Withdraw any ETH in the contract to an owner address.         |
+| withdrawTokens | `Only To Owner Address` | Withdraw specified token in the contract to an owner address. |
 
 ### 3.3. Contract Upgrade Functions
 
@@ -95,16 +101,16 @@ The TokenSwap contract is a pure logic contract that can be used to swap ETH <->
 
 ### 3.5. Role Management Functions
 
-| Function           | Restrictions | Description                                        |
-| ------------------ | ------------ | -------------------------------------------------- |
-| grantRole          | `Role Admin` | Grant a role to an address.                        |
-| revokeRole         | `Role Admin` | Revoke a role from an address.                     |
-| getRoleAdmin       | `N/A`        | Get the admin of a role for the identifier.        |
-| getRoleMember      | `N/A`        | Get the member of a role for the identifier.       |
-| getRoleMembers     | `N/A`        | Get the members of a role for the identifier.      |
-| getRoleMemberCount | `N/A`        | Get the member count of a role for the identifier. |
-| hasRole            | `N/A`        | Check if an address has a role.                    |
-| renounceRole       | `N/A`        | Renounce a role from an address.                   |
+| Function           | Restrictions  | Description                                        |
+| ------------------ | ------------- | -------------------------------------------------- |
+| grantRole          | `Role Admin`  | Grant a role to an address.                        |
+| revokeRole         | `Role Admin`  | Revoke a role from an address.                     |
+| getRoleAdmin       | `N/A`         | Get the admin of a role for the identifier.        |
+| getRoleMember      | `N/A`         | Get the member of a role for the identifier.       |
+| getRoleMembers     | `N/A`         | Get the members of a role for the identifier.      |
+| getRoleMemberCount | `N/A`         | Get the member count of a role for the identifier. |
+| hasRole            | `N/A`         | Check if an address has a role.                    |
+| renounceRole       | `Role Member` | Renounce a role from an address.                   |
 
 ### 3.6. Getter Functions
 
@@ -430,7 +436,7 @@ Input value as a role e.g. `OWNER_ROLE`.
 
 #### 7.7.1. Get Creator
 
-Returns the creator address of the contract.
+Returns the contract creator address.
 
 | Chain        | Command                        |
 | ------------ | ------------------------------ |
@@ -439,9 +445,21 @@ Returns the creator address of the contract.
 | Base Sepolia | `make getCreator base-sepolia` |
 | Base Mainnet | `make getCreator base-mainnet` |
 
-#### 7.7.2. Get Balance
+#### 7.7.2. Get Version
+
+Returns the current version of the contract.
+
+| Chain        | Command                        |
+| ------------ | ------------------------------ |
+| Anvil        | `make getVersion anvil`        |
+| Holesky      | `make getVersion holesky`      |
+| Base Sepolia | `make getVersion base-sepolia` |
+| Base Mainnet | `make getVersion base-mainnet` |
+
+#### 7.7.3. Get Balance
 
 Input value as token identifier e.g. `USDC`.
+Returns the balance of the contract for the specified token.
 
 | Chain        | Command                        |
 | ------------ | ------------------------------ |
@@ -449,6 +467,53 @@ Input value as token identifier e.g. `USDC`.
 | Holesky      | `make getBalance holesky`      |
 | Base Sepolia | `make getBalance base-sepolia` |
 | Base Mainnet | `make getBalance base-mainnet` |
+
+#### 7.7.4. Get Event Block Numbers
+
+Returns the block numbers of all previous contract events.
+
+| Chain        | Command                                  |
+| ------------ | ---------------------------------------- |
+| Anvil        | `make getEventBlockNumbers anvil`        |
+| Holesky      | `make getEventBlockNumbers holesky`      |
+| Base Sepolia | `make getEventBlockNumbers base-sepolia` |
+| Base Mainnet | `make getEventBlockNumbers base-mainnet` |
+
+#### 7.7.5. Get Contract Address
+
+Input value as a contract identifier e.g. `uniswapV3Router`.
+Returns the contract address of the specified identifier.
+
+| Chain        | Command                                |
+| ------------ | -------------------------------------- |
+| Anvil        | `make getContractAddress anvil`        |
+| Holesky      | `make getContractAddress holesky`      |
+| Base Sepolia | `make getContractAddress base-sepolia` |
+| Base Mainnet | `make getContractAddress base-mainnet` |
+
+#### 7.7.6. Get Token Address
+
+Input value as a token identifier e.g. `USDC`.
+Returns the token address of the specified identifier.
+
+| Chain        | Command                             |
+| ------------ | ----------------------------------- |
+| Anvil        | `make getTokenAddress anvil`        |
+| Holesky      | `make getTokenAddress holesky`      |
+| Base Sepolia | `make getTokenAddress base-sepolia` |
+| Base Mainnet | `make getTokenAddress base-mainnet` |
+
+#### 7.7.7. Get Uniswap V3 Pool
+
+Input value as a Uniswap V3 Pool identifier e.g. `USDC/ETH`.
+Returns the address and fee of the specified identifier.
+
+| Chain        | Command                              |
+| ------------ | ------------------------------------ |
+| Anvil        | `make getUniswapV3Pool anvil`        |
+| Holesky      | `make getUniswapV3Pool holesky`      |
+| Base Sepolia | `make getUniswapV3Pool base-sepolia` |
+| Base Mainnet | `make getUniswapV3Pool base-mainnet` |
 
 ## 8. Build and Deploy Documentation
 

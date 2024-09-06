@@ -210,13 +210,6 @@ contract Interactions is GetDeployedContract {
         vm.stopBroadcast();
     }
 
-    function getBalance(string memory _identifier) public returns (uint256 balance) {
-        vm.startBroadcast();
-        interactionsSetup();
-        balance = simpleSwap.getBalance(_identifier);
-        vm.stopBroadcast();
-    }
-
     function getVersion() public returns (string memory version) {
         vm.startBroadcast();
         interactionsSetup();
@@ -224,10 +217,41 @@ contract Interactions is GetDeployedContract {
         vm.stopBroadcast();
     }
 
+    function getBalance(string memory _identifier) public returns (uint256 balance) {
+        vm.startBroadcast();
+        interactionsSetup();
+        balance = simpleSwap.getBalance(_identifier);
+        vm.stopBroadcast();
+    }
+
+    function getEventBlockNumbers() public returns (uint64[] memory eventBlockNumbers) {
+        vm.startBroadcast();
+        interactionsSetup();
+        eventBlockNumbers = simpleSwap.getEventBlockNumbers();
+        vm.stopBroadcast();
+    }
+
     function getContractAddress(string memory _identifier) public returns (address contractAddress) {
         vm.startBroadcast();
         interactionsSetup();
         contractAddress = simpleSwap.getContractAddress(_identifier);
+        vm.stopBroadcast();
+    }
+
+    function getTokenAddress(string memory _identifier) public returns (address tokenAddress) {
+        vm.startBroadcast();
+        interactionsSetup();
+        tokenAddress = simpleSwap.getTokenAddress(_identifier);
+        vm.stopBroadcast();
+    }
+
+    function getUniswapV3Pool(string memory _identifier)
+        public
+        returns (address uniswapV3PoolAddress, uint24 uniswapV3PoolFee)
+    {
+        vm.startBroadcast();
+        interactionsSetup();
+        (uniswapV3PoolAddress, uniswapV3PoolFee) = simpleSwap.getUniswapV3Pool(_identifier);
         vm.stopBroadcast();
     }
 

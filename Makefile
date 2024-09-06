@@ -294,6 +294,10 @@ getCreator-script:; $(interactions-script) --sig "getCreator()"
 getCreator: get-network-args \
 	getCreator-script
 
+getVersion-script:; $(interactions-script) --sig "getVersion()"
+getVersion: get-network-args \
+	getVersion-script
+
 getBalance-script:; $(interactions-script) --sig "getBalance(string)" ${MAKE_CLI_INPUT_VALUE}
 getBalance: get-network-args \
 	ask-for-value \
@@ -301,15 +305,9 @@ getBalance: get-network-args \
 	getBalance-script \
 	remove-value
 
-getVersion-script:; $(interactions-script) --sig "getVersion()"
-getVersion: get-network-args \
-	getVersion-script
-
-
-getSlippageTolerance-script:; $(interactions-script) --sig "getSlippageTolerance()"
-getSlippageTolerance: get-network-args \
-	getSlippageTolerance-script
-
+getEventBlockNumbers-script:; $(interactions-script) --sig "getEventBlockNumbers()"
+getEventBlockNumbers: get-network-args \
+	getEventBlockNumbers-script
 
 getContractAddress-script:; $(interactions-script) --sig "getContractAddress(string)" ${MAKE_CLI_INPUT_VALUE}
 getContractAddress: get-network-args \
@@ -317,3 +315,21 @@ getContractAddress: get-network-args \
 	store-value \
 	getContractAddress-script \
 	remove-value
+
+getTokenAddress-script:; $(interactions-script) --sig "getTokenAddress(string)" ${MAKE_CLI_INPUT_VALUE}
+getTokenAddress: get-network-args \
+	ask-for-value \
+	store-value \
+	getTokenAddress-script \
+	remove-value
+
+getUniswapV3Pool-script:; $(interactions-script) --sig "getUniswapV3Pool(string)" ${MAKE_CLI_INPUT_VALUE}
+getUniswapV3Pool: get-network-args \
+	ask-for-value \
+	store-value \
+	getUniswapV3Pool-script \
+	remove-value
+
+getSlippageTolerance-script:; $(interactions-script) --sig "getSlippageTolerance()"
+getSlippageTolerance: get-network-args \
+	getSlippageTolerance-script
