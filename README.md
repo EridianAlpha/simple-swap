@@ -61,7 +61,7 @@ The TokenSwap contract is a pure logic contract that can be used to swap ETH <->
 ## 2. Usage
 
 1. Send ETH directly to the contract address to receive USDC on the sender address.
-2. Send USDC to the `swapUSDC` function to receive ETH on the sender address.
+2. Send USDC to the `swapUsdc` function to receive ETH on the sender address.
 
 ## 3. Functions
 
@@ -69,7 +69,7 @@ The TokenSwap contract is a pure logic contract that can be used to swap ETH <->
 
 | Function | Restrictions | Description                            |
 | -------- | ------------ | -------------------------------------- |
-| swapUSDC | `N/A`        | Swap specified amount of USDC for ETH. |
+| swapUsdc | `N/A`        | Swap specified amount of USDC for ETH. |
 
 ### 3.2. Withdraw Functions
 
@@ -185,10 +185,10 @@ Input value in ETH e.g. `0.15`.
 
 | Chain        | Command                          |
 | ------------ | -------------------------------- |
-| Anvil        | `make forceSendETH anvil`        |
-| Holesky      | `make forceSendETH holesky`      |
-| Base Sepolia | `make forceSendETH base-sepolia` |
-| Base Mainnet | `make forceSendETH base-mainnet` |
+| Anvil        | `make forceSendEth anvil`        |
+| Holesky      | `make forceSendEth holesky`      |
+| Base Sepolia | `make forceSendEth base-sepolia` |
+| Base Mainnet | `make forceSendEth base-mainnet` |
 
 ### 7.2. Swap Functions
 
@@ -199,10 +199,10 @@ Input value in ETH e.g. `0.15`.
 
 | Chain        | Command                     |
 | ------------ | --------------------------- |
-| Anvil        | `make sendETH anvil`        |
-| Holesky      | `make sendETH holesky`      |
-| Base Sepolia | `make sendETH base-sepolia` |
-| Base Mainnet | `make sendETH base-mainnet` |
+| Anvil        | `make sendEth anvil`        |
+| Holesky      | `make sendEth holesky`      |
+| Base Sepolia | `make sendEth base-sepolia` |
+| Base Mainnet | `make sendEth base-mainnet` |
 
 #### 7.2.2. Swap USDC
 
@@ -211,10 +211,10 @@ Input value in USD e.g. `200`.
 
 | Chain        | Command                      |
 | ------------ | ---------------------------- |
-| Anvil        | `make swapUSDC anvil`        |
-| Holesky      | `make swapUSDC holesky`      |
-| Base Sepolia | `make swapUSDC base-sepolia` |
-| Base Mainnet | `make swapUSDC base-mainnet` |
+| Anvil        | `make swapUsdc anvil`        |
+| Holesky      | `make swapUsdc holesky`      |
+| Base Sepolia | `make swapUsdc base-sepolia` |
+| Base Mainnet | `make swapUsdc base-mainnet` |
 
 ### 7.3. Withdraw Functions
 

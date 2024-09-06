@@ -36,7 +36,7 @@ contract Interactions is GetDeployedContract {
     // ================================================================
     // │                         FORCE SEND ETH                       │
     // ================================================================
-    function forceSendETH(uint256 _value) public {
+    function forceSendEth(uint256 _value) public {
         interactionsSetup();
         vm.startBroadcast();
         new ForceSendEth{value: _value}(payable(address(simpleSwap)));
@@ -46,26 +46,26 @@ contract Interactions is GetDeployedContract {
     // ================================================================
     // │                         SWAP FUNCTIONS                       │
     // ================================================================
-    function sendETH(uint256 _value) public {
+    function sendEth(uint256 _value) public {
         interactionsSetup();
         vm.startBroadcast();
-        uint256 USDCBalanceBefore = IERC20(simpleSwap.getTokenAddress("USDC")).balanceOf(address(msg.sender));
+        uint256 UsdcBalanceBefore = IERC20(simpleSwap.getTokenAddress("USDC")).balanceOf(address(msg.sender));
         payable(address(simpleSwap)).sendValue(_value);
-        uint256 USDCBalanceAfter = IERC20(simpleSwap.getTokenAddress("USDC")).balanceOf(address(msg.sender));
+        uint256 UsdcBalanceAfter = IERC20(simpleSwap.getTokenAddress("USDC")).balanceOf(address(msg.sender));
         console.log("ETH Swapped:   ", _value);
-        console.log("USDC Received: ", USDCBalanceAfter - USDCBalanceBefore);
+        console.log("USDC Received: ", UsdcBalanceAfter - UsdcBalanceBefore);
         vm.stopBroadcast();
     }
 
-    function swapUSDC(uint256 _value) public {
+    function swapUsdc(uint256 _value) public {
         interactionsSetup();
         vm.startBroadcast();
-        uint256 ETHBalanceBefore = address(msg.sender).balance;
+        uint256 EthBalanceBefore = address(msg.sender).balance;
         IERC20(simpleSwap.getTokenAddress("USDC")).approve(address(simpleSwap), _value);
-        simpleSwap.swapUSDC(_value);
-        uint256 ETHBalanceAfter = address(msg.sender).balance;
+        simpleSwap.swapUsdc(_value);
+        uint256 EthBalanceAfter = address(msg.sender).balance;
         console.log("USDC Swapped: ", _value);
-        console.log("ETH Received: ", ETHBalanceAfter - ETHBalanceBefore);
+        console.log("ETH Received: ", EthBalanceAfter - EthBalanceBefore);
         vm.stopBroadcast();
     }
 
@@ -100,7 +100,7 @@ contract Interactions is GetDeployedContract {
         // aavePM.updateContractAddress("tokenSwapsModule", address(new TokenSwapsModule(address(aavePM))));
         // aavePM.updateContractAddress("aaveFunctionsModule", address(new AaveFunctionsModule(address(aavePM))));
         // aavePM.updateContractAddress(
-        //     "borrowAndWithdrawUSDCModule", address(new BorrowAndWithdrawUSDCModule(address(aavePM)))
+        //     "borrowAndWithdrawUsdcModule", address(new BorrowAndWithdrawUsdcModule(address(aavePM)))
         // );
         // aavePM.updateContractAddress("rebalanceModule", address(new RebalanceModule(address(aavePM))));
         // aavePM.updateContractAddress("reinvestModule", address(new ReinvestModule(address(aavePM))));

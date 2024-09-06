@@ -5,7 +5,7 @@ import {SimpleSwapTestSetup} from "test/unit/SimpleSwap/TestSetup.t.sol";
 
 import {ISimpleSwap} from "src/interfaces/ISimpleSwap.sol";
 import {InvalidOwner} from "test/testHelperContracts/InvalidOwner.sol";
-import {ForceSend} from "test/testHelperContracts/ForceSendETH.sol";
+import {ForceSendEth} from "test/testHelperContracts/ForceSendEth.sol";
 
 import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
@@ -15,7 +15,7 @@ import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 contract SimpleSwapWithdrawEthTest is SimpleSwapTestSetup {
     function withdrawEth_SetUp() public {
         vm.prank(owner1);
-        new ForceSend{value: SEND_VALUE}(payable(address(simpleSwap)));
+        new ForceSendEth{value: SEND_VALUE}(payable(address(simpleSwap)));
         require(address(simpleSwap).balance > 0, "Balance before withdrawEth is 0");
     }
 

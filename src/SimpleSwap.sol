@@ -46,7 +46,7 @@ contract SimpleSwap is Core {
     }
 
     /// @notice Function to swap USDC to ETH.
-    function swapUSDC(uint256 _value) external returns (uint256 amountOut) {
+    function swapUsdc(uint256 _value) external returns (uint256 amountOut) {
         IERC20Extended(getTokenAddress("USDC")).transferFrom(msg.sender, address(this), _value);
         amountOut = swapTokens("USDC/ETH", "USDC", "ETH", _value);
     }
@@ -63,13 +63,13 @@ contract SimpleSwap is Core {
         (address uniswapV3PoolAddress, uint24 uniswapV3PoolFee) = getUniswapV3Pool(_uniswapV3PoolIdentifier);
 
         // If the input is ETH, wrap ETH to WETH.
-        if (_isIdentifierETH(_tokenInIdentifier)) {
+        if (_isIdentifierEth(_tokenInIdentifier)) {
             IWETH9(getTokenAddress("WETH")).deposit{value: _amountIn}();
         }
 
         // If ETH is input or output, change the identifier to WETH.
-        _tokenInIdentifier = _isIdentifierETH(_tokenInIdentifier) ? "WETH" : _tokenInIdentifier;
-        _tokenOutIdentifier = _isIdentifierETH(_tokenOutIdentifier) ? "WETH" : _tokenOutIdentifier;
+        _tokenInIdentifier = _isIdentifierEth(_tokenInIdentifier) ? "WETH" : _tokenInIdentifier;
+        _tokenOutIdentifier = _isIdentifierEth(_tokenOutIdentifier) ? "WETH" : _tokenOutIdentifier;
 
         // Get the token addresses for the input and output tokens.
         address tokenInAddress = getTokenAddress(_tokenInIdentifier);
@@ -105,8 +105,8 @@ contract SimpleSwap is Core {
     /// @notice Checks if the identifier is for ETH.
     /// @dev Compares the identifier to the ETH identifier and returns true if they match.
     /// @param _identifier The identifier to check.
-    /// @return isETH True if the identifier is for ETH.
-    function _isIdentifierETH(string memory _identifier) internal pure returns (bool) {
+    /// @return isEth True if the identifier is for ETH.
+    function _isIdentifierEth(string memory _identifier) internal pure returns (bool isEth) {
         return (Strings.equal(_identifier, "ETH")) ? true : false;
     }
 }

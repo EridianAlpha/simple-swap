@@ -146,31 +146,31 @@ deploy: get-network-args \
 # ================================================================
 # │                  RUN COMMANDS - FORCE SEND ETH               │
 # ================================================================
-forceSendETH-script:; $(interactions-script) --sig "forceSendETH(uint256)" ${MAKE_CLI_INPUT_VALUE}
-forceSendETH: get-network-args \
+forceSendEth-script:; $(interactions-script) --sig "forceSendEth(uint256)" ${MAKE_CLI_INPUT_VALUE}
+forceSendEth: get-network-args \
 	ask-for-value \
 	convert-value-to-wei \
 	store-value \
-	forceSendETH-script \
+	forceSendEth-script \
 	remove-value
 
 # ================================================================
 # │                  RUN COMMANDS - SWAP FUNCTIONS               │
 # ================================================================
-sendETH-script:; $(interactions-script) --sig "sendETH(uint256)" ${MAKE_CLI_INPUT_VALUE}
-sendETH: get-network-args \
+sendEth-script:; $(interactions-script) --sig "sendEth(uint256)" ${MAKE_CLI_INPUT_VALUE}
+sendEth: get-network-args \
 	ask-for-value \
 	convert-value-to-wei \
 	store-value \
-	sendETH-script \
+	sendEth-script \
 	remove-value
 
-swapUSDC-script:; $(interactions-script) --sig "swapUSDC(uint256)" ${MAKE_CLI_INPUT_VALUE}
-swapUSDC: get-network-args \
+swapUsdc-script:; $(interactions-script) --sig "swapUsdc(uint256)" ${MAKE_CLI_INPUT_VALUE}
+swapUsdc: get-network-args \
 	ask-for-value \
 	convert-value-to-USDC \
 	store-value \
-	swapUSDC-script \
+	swapUsdc-script \
 	remove-value
 
 # ================================================================

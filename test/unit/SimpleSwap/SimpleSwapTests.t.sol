@@ -17,43 +17,43 @@ contract SimpleSwapTests is SimpleSwapTestSetup {
     // Library directives
     using Address for address payable;
 
-    function test_SwapZeroETH() public {
+    function test_SwapZeroEth() public {
         vm.startPrank(owner1);
         vm.expectRevert(ISimpleSwap.SimpleSwap__SwapAmountInZero.selector);
         payable(address(simpleSwap)).sendValue(0);
         vm.stopPrank();
     }
 
-    function test_SwapUSDC() public {
-        address USDCAddress = simpleSwap.getTokenAddress("USDC");
+    function test_SwapUsdc() public {
+        address UsdcAddress = simpleSwap.getTokenAddress("USDC");
 
         vm.startPrank(owner1);
         // Send some ETH to the contract so the user has a initial amount of USDC
         payable(address(simpleSwap)).sendValue(SEND_VALUE);
 
-        uint256 USDCBalanceBeforeSwap = IERC20(USDCAddress).balanceOf(owner1);
-        uint256 ETHBalanceBeforeSwap = address(owner1).balance;
+        uint256 UsdcBalanceBeforeSwap = IERC20(UsdcAddress).balanceOf(owner1);
+        uint256 EthBalanceBeforeSwap = address(owner1).balance;
 
         // Approve USDC to SimpleSwap contract
-        IERC20(USDCAddress).approve(address(simpleSwap), USDC_SWAP_AMOUNT);
+        IERC20(UsdcAddress).approve(address(simpleSwap), USDC_SWAP_AMOUNT);
 
         // Swap USDC to ETH
-        uint256 amountOut = simpleSwap.swapUSDC(USDC_SWAP_AMOUNT);
+        uint256 amountOut = simpleSwap.swapUsdc(USDC_SWAP_AMOUNT);
 
-        uint256 USDCBalanceAfterSwap = IERC20(USDCAddress).balanceOf(owner1);
-        uint256 ETHBalanceAfterSwap = address(owner1).balance;
+        uint256 UsdcBalanceAfterSwap = IERC20(UsdcAddress).balanceOf(owner1);
+        uint256 EthBalanceAfterSwap = address(owner1).balance;
 
         vm.stopPrank();
 
         // Check that owner1 reduced their USDC balance by the amount swapped
         require(
-            USDCBalanceBeforeSwap - USDC_SWAP_AMOUNT == USDCBalanceAfterSwap,
+            UsdcBalanceBeforeSwap - USDC_SWAP_AMOUNT == UsdcBalanceAfterSwap,
             "USDC balance did not decrease by the amount swapped"
         );
 
         // Check that the ETH balance of owner1 increased by the amountOut
         require(
-            ETHBalanceAfterSwap - ETHBalanceBeforeSwap == amountOut,
+            EthBalanceAfterSwap - EthBalanceBeforeSwap == amountOut,
             "ETH balance did not increase by the correct amount"
         );
     }

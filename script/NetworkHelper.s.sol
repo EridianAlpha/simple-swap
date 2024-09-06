@@ -13,8 +13,8 @@ contract NetworkHelper is Script {
 
     // Declare the chain variables
     address public uniswapV3RouterAddress;
-    address public uniswapV3USDCETHPoolAddress;
-    uint24 public uniswapV3USDCETHPoolFee;
+    address public uniswapV3UsdcEthPoolAddress;
+    uint24 public uniswapV3UsdcEthPoolFee;
     address public wethAddress;
     address public usdcAddress;
 
@@ -49,9 +49,9 @@ contract NetworkHelper is Script {
 
         // Set the chain variables
         uniswapV3RouterAddress = vm.envAddress(string(abi.encodePacked(chainName, "_ADDRESS_UNISWAP_V3_ROUTER")));
-        uniswapV3USDCETHPoolAddress =
+        uniswapV3UsdcEthPoolAddress =
             vm.envAddress(string(abi.encodePacked(chainName, "_ADDRESS_UNISWAP_V3_USDC_ETH_POOL")));
-        uniswapV3USDCETHPoolFee =
+        uniswapV3UsdcEthPoolFee =
             uint24(vm.envUint(string(abi.encodePacked(chainName, "_FEE_UNISWAP_V3_USDC_ETH_POOL"))));
         wethAddress = vm.envAddress(string(abi.encodePacked(chainName, "_ADDRESS_WETH")));
         usdcAddress = vm.envAddress(string(abi.encodePacked(chainName, "_ADDRESS_USDC")));
@@ -74,7 +74,7 @@ contract NetworkHelper is Script {
 
         // UniswapV3 pool
         UniswapV3Pool[] memory uniswapV3Pools = new UniswapV3Pool[](1);
-        uniswapV3Pools[0] = UniswapV3Pool("USDC/ETH", uniswapV3USDCETHPoolAddress, uniswapV3USDCETHPoolFee);
+        uniswapV3Pools[0] = UniswapV3Pool("USDC/ETH", uniswapV3UsdcEthPoolAddress, uniswapV3UsdcEthPoolFee);
 
         activeNetworkConfig = NetworkConfig({
             contractAddresses: contractAddresses,
