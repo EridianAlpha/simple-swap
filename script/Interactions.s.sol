@@ -6,11 +6,12 @@ pragma solidity 0.8.27;
 // ================================================================
 
 // Forge and Script Imports
-import {Script, console} from "lib/forge-std/src/Script.sol";
+import {console} from "lib/forge-std/src/Script.sol";
 import {GetDeployedContract} from "script/GetDeployedContract.s.sol";
 
 // Contract Imports
 import {SimpleSwap} from "src/SimpleSwap.sol";
+import {ForceSendEth} from "test/testHelperContracts/ForceSendEth.sol";
 
 // Library Directive Imports
 import {Address} from "@openzeppelin/contracts/utils/Address.sol";
@@ -33,42 +34,17 @@ contract Interactions is GetDeployedContract {
     }
 
     // ================================================================
-    // │                            GETTERS                           │
+    // │                         FORCE SEND ETH                       │
     // ================================================================
-    function getBalance() public returns (uint256 ethBalance) {
-        vm.startBroadcast();
+    function forceSendETH(uint256 _value) public {
         interactionsSetup();
-        ethBalance = address(simpleSwap).balance;
-        vm.stopBroadcast();
-        return ethBalance;
-    }
-
-    function getCreator() public returns (address creator) {
         vm.startBroadcast();
-        interactionsSetup();
-        creator = simpleSwap.getCreator();
+        new ForceSendEth{value: _value}(payable(address(simpleSwap)));
         vm.stopBroadcast();
-        return creator;
-    }
-
-    function getVersion() public returns (string memory version) {
-        vm.startBroadcast();
-        interactionsSetup();
-        version = simpleSwap.getVersion();
-        vm.stopBroadcast();
-        return version;
-    }
-
-    function getSlippageTolerance() public returns (uint256 slippageTolerance) {
-        vm.startBroadcast();
-        interactionsSetup();
-        slippageTolerance = simpleSwap.getSlippageTolerance();
-        vm.stopBroadcast();
-        return slippageTolerance;
     }
 
     // ================================================================
-    // │                          ETH & TOKENS                        │
+    // │                         SWAP FUNCTIONS                       │
     // ================================================================
     function sendETH(uint256 _value) public {
         interactionsSetup();
@@ -93,34 +69,172 @@ contract Interactions is GetDeployedContract {
         vm.stopBroadcast();
     }
 
-    // Rescue ETH
-
-    // Rescue Tokens
-
     // ================================================================
-    // │                  FUNCTIONS - ROLE MANAGEMENT                 │
+    // │                       WITHDRAW FUNCTIONS                     │
     // ================================================================
-    function getRoleMembers(string memory _roleString) public returns (address[] memory) {
-        vm.startBroadcast();
+    function withdrawEth(address _owner) public {
         interactionsSetup();
-        address[] memory members = simpleSwap.getRoleMembers(_roleString);
+        vm.startBroadcast();
+        simpleSwap.withdrawEth(_owner);
         vm.stopBroadcast();
-        return members;
     }
 
-    function grantRole(string memory _roleString, address _account) public {
-        bytes32 roleBytes = keccak256(abi.encodePacked(_roleString));
+    function withdrawTokens(string memory _identifier, address _owner) public {
         interactionsSetup();
         vm.startBroadcast();
-        simpleSwap.grantRole(roleBytes, _account);
+        simpleSwap.withdrawTokens(_identifier, _owner);
+        vm.stopBroadcast();
+    }
+
+    // ================================================================
+    // │                            UPGRADES                          │
+    // ================================================================
+    // TODO: Implement upgrade function
+    function upgrade() public {
+        interactionsSetup();
+        vm.startBroadcast();
+        // AavePM newAavePM = new AavePM();
+        // aavePM.upgradeToAndCall(address(newAavePM), "");
+
+        // // Deploy updated modules
+        // aavePM.updateContractAddress("tokenSwapsModule", address(new TokenSwapsModule(address(aavePM))));
+        // aavePM.updateContractAddress("aaveFunctionsModule", address(new AaveFunctionsModule(address(aavePM))));
+        // aavePM.updateContractAddress(
+        //     "borrowAndWithdrawUSDCModule", address(new BorrowAndWithdrawUSDCModule(address(aavePM)))
+        // );
+        // aavePM.updateContractAddress("rebalanceModule", address(new RebalanceModule(address(aavePM))));
+        // aavePM.updateContractAddress("reinvestModule", address(new ReinvestModule(address(aavePM))));
+        vm.stopBroadcast();
+    }
+
+    // ================================================================
+    // │                            UPDATES                           │
+    // ================================================================
+    function updateContractAddress(string memory _identifier, address _newContractAddress) public {
+        interactionsSetup();
+        vm.startBroadcast();
+        simpleSwap.updateContractAddress(_identifier, _newContractAddress);
+        vm.stopBroadcast();
+    }
+
+    function updateTokenAddress(string memory _identifier, address _newContractAddress) public {
+        interactionsSetup();
+        vm.startBroadcast();
+        simpleSwap.updateTokenAddress(_identifier, _newContractAddress);
+        vm.stopBroadcast();
+    }
+
+    function updateUniswapV3PoolAddress(string memory _identifier, address _newContractAddress, uint24 _newFee)
+        public
+    {
+        interactionsSetup();
+        vm.startBroadcast();
+        simpleSwap.updateUniswapV3Pool(_identifier, _newContractAddress, _newFee);
+        vm.stopBroadcast();
+    }
+
+    function updateSlippageTolerance(uint16 _value) public {
+        interactionsSetup();
+        vm.startBroadcast();
+        simpleSwap.updateSlippageTolerance(_value);
+        vm.stopBroadcast();
+    }
+
+    // ================================================================
+    // │                         ROLE MANAGEMENT                       │
+    // ================================================================
+    function grantRole(string memory _roleString, address _account) public {
+        interactionsSetup();
+        vm.startBroadcast();
+        simpleSwap.grantRole(keccak256(abi.encodePacked(_roleString)), _account);
         vm.stopBroadcast();
     }
 
     function revokeRole(string memory _roleString, address _account) public {
-        bytes32 roleBytes = keccak256(abi.encodePacked(_roleString));
         interactionsSetup();
         vm.startBroadcast();
-        simpleSwap.revokeRole(roleBytes, _account);
+        simpleSwap.revokeRole(keccak256(abi.encodePacked(_roleString)), _account);
+        vm.stopBroadcast();
+    }
+
+    function getRoleAdmin(string memory _roleString) public returns (bytes32 roleAdmin) {
+        vm.startBroadcast();
+        interactionsSetup();
+        roleAdmin = simpleSwap.getRoleAdmin(keccak256(abi.encodePacked(_roleString)));
+        vm.stopBroadcast();
+    }
+
+    function getRoleMember(string memory _roleString, uint256 _index) public returns (address roleMember) {
+        vm.startBroadcast();
+        interactionsSetup();
+        roleMember = simpleSwap.getRoleMember(keccak256(abi.encodePacked(_roleString)), _index);
+        vm.stopBroadcast();
+    }
+
+    function getRoleMembers(string memory _roleString) public returns (address[] memory members) {
+        vm.startBroadcast();
+        interactionsSetup();
+        members = simpleSwap.getRoleMembers(_roleString);
+        vm.stopBroadcast();
+    }
+
+    function getRoleMemberCount(string memory _roleString) public returns (uint256 memberCount) {
+        vm.startBroadcast();
+        interactionsSetup();
+        memberCount = simpleSwap.getRoleMemberCount(keccak256(abi.encodePacked(_roleString)));
+        vm.stopBroadcast();
+    }
+
+    function checkRole(string memory _roleString, address _account) public returns (bool hasRole) {
+        vm.startBroadcast();
+        interactionsSetup();
+        hasRole = simpleSwap.hasRole(keccak256(abi.encodePacked(_roleString)), _account);
+        vm.stopBroadcast();
+    }
+
+    function renounceRole(string memory _roleString) public {
+        interactionsSetup();
+        vm.startBroadcast();
+        // Prove the msg.sender as confirmation to renounce the role
+        simpleSwap.renounceRole(keccak256(abi.encodePacked(_roleString)), msg.sender);
+        vm.stopBroadcast();
+    }
+
+    // ================================================================
+    // │                            GETTERS                           │
+    // ================================================================
+    function getCreator() public returns (address creator) {
+        vm.startBroadcast();
+        interactionsSetup();
+        creator = simpleSwap.getCreator();
+        vm.stopBroadcast();
+    }
+
+    function getBalance(string memory _identifier) public returns (uint256 balance) {
+        vm.startBroadcast();
+        interactionsSetup();
+        balance = simpleSwap.getBalance(_identifier);
+        vm.stopBroadcast();
+    }
+
+    function getVersion() public returns (string memory version) {
+        vm.startBroadcast();
+        interactionsSetup();
+        version = simpleSwap.getVersion();
+        vm.stopBroadcast();
+    }
+
+    function getContractAddress(string memory _identifier) public returns (address contractAddress) {
+        vm.startBroadcast();
+        interactionsSetup();
+        contractAddress = simpleSwap.getContractAddress(_identifier);
+        vm.stopBroadcast();
+    }
+
+    function getSlippageTolerance() public returns (uint256 slippageTolerance) {
+        vm.startBroadcast();
+        interactionsSetup();
+        slippageTolerance = simpleSwap.getSlippageTolerance();
         vm.stopBroadcast();
     }
 }

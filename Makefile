@@ -123,7 +123,7 @@ remove-value:
 # │                CONTRACT SPECIFIC CONFIGURATION               │
 # ================================================================
 install:
-	forge install foundry-rs/forge-std@v1.9.1 --no-commit && \
+	forge install foundry-rs/forge-std@v1.9.2 --no-commit && \
 	forge install Cyfrin/foundry-devops@0.2.2 --no-commit && \
 	forge install openzeppelin/openzeppelin-contracts@v5.0.2 --no-commit && \
 	forge install openzeppelin/openzeppelin-contracts-upgradeable@v5.0.2 --no-commit && \
@@ -134,53 +134,29 @@ install:
 # ================================================================
 # │                         RUN COMMANDS                         │
 # ================================================================
-# Interactions script
 interactions-script = @forge script script/Interactions.s.sol:Interactions ${NETWORK_ARGS} -vvvv
 
 # ================================================================
-# │                  RUN COMMANDS - DEPLOY & UPGRADE             │
+# │                    RUN COMMANDS - DEPLOYMENT                 │
 # ================================================================
-# Deploy script
 deploy-script:; @forge script script/Deploy.s.sol:Deploy --sig "standardDeployment()" ${NETWORK_ARGS} -vvvv
 deploy: get-network-args \
 	deploy-script
 
-# Upgrade script
-upgrade-script:; $(interactions-script) --sig "upgrade()"
-upgrade: get-network-args \
-	upgrade-script
-
 # ================================================================
-# │                  RUN COMMANDS - ROLE MANAGEMENT              │
+# │                  RUN COMMANDS - FORCE SEND ETH               │
 # ================================================================
-# Get role members script
-getRoleMembers-script:; $(interactions-script) --sig "getRoleMembers(string)" ${MAKE_CLI_INPUT_VALUE}
-getRoleMembers: get-network-args \
+forceSendETH-script:; $(interactions-script) --sig "forceSendETH(uint256)" ${MAKE_CLI_INPUT_VALUE}
+forceSendETH: get-network-args \
 	ask-for-value \
+	convert-value-to-wei \
 	store-value \
-	getRoleMembers-script \
-	remove-value
-
-# Grant role script
-grantRole-script:; $(interactions-script) --sig "grantRole(string, address)" $(shell echo $(MAKE_CLI_INPUT_VALUE) | tr ',' ' ')
-grantRole: get-network-args \
-	ask-for-value \
-	store-value \
-	grantRole-script \
-	remove-value
-
-# Revoke role script
-revokeRole-script:; $(interactions-script) --sig "revokeRole(string, address)" $(shell echo $(MAKE_CLI_INPUT_VALUE) | tr ',' ' ')
-revokeRole: get-network-args \
-	ask-for-value \
-	store-value \
-	revokeRole-script \
+	forceSendETH-script \
 	remove-value
 
 # ================================================================
-# │                  RUN COMMANDS - ETH & TOKENS                 │
+# │                  RUN COMMANDS - SWAP FUNCTIONS               │
 # ================================================================
-# Send ETH script
 sendETH-script:; $(interactions-script) --sig "sendETH(uint256)" ${MAKE_CLI_INPUT_VALUE}
 sendETH: get-network-args \
 	ask-for-value \
@@ -189,7 +165,6 @@ sendETH: get-network-args \
 	sendETH-script \
 	remove-value
 
-# Swap USDC script
 swapUSDC-script:; $(interactions-script) --sig "swapUSDC(uint256)" ${MAKE_CLI_INPUT_VALUE}
 swapUSDC: get-network-args \
 	ask-for-value \
@@ -198,25 +173,147 @@ swapUSDC: get-network-args \
 	swapUSDC-script \
 	remove-value
 
-# Get contract ETH balance script
-getBalance-script:; $(interactions-script) --sig "getBalance()"
-getBalance: get-network-args \
-	getBalance-script
+# ================================================================
+# │                RUN COMMANDS - WITHDRAW FUNCTIONS             │
+# ================================================================
+withdrawEth-script:; $(interactions-script) --sig "withdrawEth(address)" ${MAKE_CLI_INPUT_VALUE}
+withdrawEth: get-network-args \
+	ask-for-value \
+	store-value \
+	withdrawEth-script \
+	remove-value
 
-# Get creator script
+withdrawTokens-script:; $(interactions-script) --sig "withdrawTokens(string, address)" $(shell echo $(MAKE_CLI_INPUT_VALUE) | tr ',' ' ')
+withdrawTokens: get-network-args \
+	ask-for-value \
+	store-value \
+	withdrawTokens-script \
+	remove-value
+
+# ================================================================
+# │                    RUN COMMANDS - UPGRADES                   │
+# ================================================================
+upgrade-script:; $(interactions-script) --sig "upgrade()"
+upgrade: get-network-args \
+	upgrade-script
+
+# ================================================================
+# │                     RUN COMMANDS - UPDATES                   │
+# ================================================================
+updateContractAddress-script:; $(interactions-script) --sig "updateContractAddress(string, address)" $(shell echo $(MAKE_CLI_INPUT_VALUE) | tr ',' ' ')
+updateContractAddress: get-network-args \
+	ask-for-value \
+	store-value \
+	updateContractAddress-script \
+	remove-value
+
+updateTokenAddress-script:; $(interactions-script) --sig "updateTokenAddress(string, address)" $(shell echo $(MAKE_CLI_INPUT_VALUE) | tr ',' ' ')
+updateTokenAddress: get-network-args \
+	ask-for-value \
+	store-value \
+	updateTokenAddress-script \
+	remove-value
+
+updateUniswapV3PoolAddress-script:; $(interactions-script) --sig "updateUniswapV3PoolAddress(string, address, uint24)" $(shell echo $(MAKE_CLI_INPUT_VALUE) | tr ',' ' ')
+updateUniswapV3PoolAddress: get-network-args \
+	ask-for-value \
+	store-value \
+	updateUniswapV3PoolAddress-script \
+	remove-value
+
+updateSlippageTolerance-script:; $(interactions-script) --sig "updateSlippageTolerance(uint16)" ${MAKE_CLI_INPUT_VALUE}
+updateSlippageTolerance: get-network-args \
+	ask-for-value \
+	store-value \
+	updateSlippageTolerance-script \
+	remove-value
+
+# ================================================================
+# │                  RUN COMMANDS - ROLE MANAGEMENT              │
+# ================================================================
+grantRole-script:; $(interactions-script) --sig "grantRole(string, address)" $(shell echo $(MAKE_CLI_INPUT_VALUE) | tr ',' ' ')
+grantRole: get-network-args \
+	ask-for-value \
+	store-value \
+	grantRole-script \
+	remove-value
+
+revokeRole-script:; $(interactions-script) --sig "revokeRole(string, address)" $(shell echo $(MAKE_CLI_INPUT_VALUE) | tr ',' ' ')
+revokeRole: get-network-args \
+	ask-for-value \
+	store-value \
+	revokeRole-script \
+	remove-value
+
+getRoleAdmin-script:; $(interactions-script) --sig "getRoleAdmin(string)" ${MAKE_CLI_INPUT_VALUE}
+getRoleAdmin: get-network-args \
+	ask-for-value \
+	store-value \
+	getRoleAdmin-script \
+	remove-value
+
+getRoleMember-script:; $(interactions-script) --sig "getRoleMember(string, uint256)" $(shell echo $(MAKE_CLI_INPUT_VALUE) | tr ',' ' ')
+getRoleMember: get-network-args \
+	ask-for-value \
+	store-value \
+	getRoleMember-script \
+	remove-value
+
+getRoleMembers-script:; $(interactions-script) --sig "getRoleMembers(string)" ${MAKE_CLI_INPUT_VALUE}
+getRoleMembers: get-network-args \
+	ask-for-value \
+	store-value \
+	getRoleMembers-script \
+	remove-value
+
+getRoleMemberCount-script:; $(interactions-script) --sig "getRoleMemberCount(string)" ${MAKE_CLI_INPUT_VALUE}
+getRoleMemberCount: get-network-args \
+	ask-for-value \
+	store-value \
+	getRoleMemberCount-script \
+	remove-value
+
+hasRole-script:; $(interactions-script) --sig "checkRole(string, address)" $(shell echo $(MAKE_CLI_INPUT_VALUE) | tr ',' ' ')
+hasRole: get-network-args \
+	ask-for-value \
+	store-value \
+	hasRole-script \
+	remove-value
+
+renounceRole-script:; $(interactions-script) --sig "renounceRole(string)" ${MAKE_CLI_INPUT_VALUE}
+renounceRole: get-network-args \
+	ask-for-value \
+	store-value \
+	renounceRole-script \
+	remove-value
+
+# ================================================================
+# │                     RUN COMMANDS - GETTERS                   │
+# ================================================================
 getCreator-script:; $(interactions-script) --sig "getCreator()"
 getCreator: get-network-args \
 	getCreator-script
 
-# ================================================================
-# │                  RUN COMMANDS - CONTRACT VARIABLES           │
-# ================================================================
-# Get version script
+getBalance-script:; $(interactions-script) --sig "getBalance(string)" ${MAKE_CLI_INPUT_VALUE}
+getBalance: get-network-args \
+	ask-for-value \
+	store-value \
+	getBalance-script \
+	remove-value
+
 getVersion-script:; $(interactions-script) --sig "getVersion()"
 getVersion: get-network-args \
 	getVersion-script
 
-# Get slippage tolerance script
+
 getSlippageTolerance-script:; $(interactions-script) --sig "getSlippageTolerance()"
 getSlippageTolerance: get-network-args \
 	getSlippageTolerance-script
+
+
+getContractAddress-script:; $(interactions-script) --sig "getContractAddress(string)" ${MAKE_CLI_INPUT_VALUE}
+getContractAddress: get-network-args \
+	ask-for-value \
+	store-value \
+	getContractAddress-script \
+	remove-value
