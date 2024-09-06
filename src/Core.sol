@@ -45,7 +45,7 @@ contract Core is Updates {
         TokenAddress[] memory tokenAddresses,
         UniswapV3Pool[] memory uniswapV3Pools,
         uint16 initialSlippageTolerance
-    ) public initializer {
+    ) external initializer {
         __AccessControlEnumerable_init();
         __AccessControl_init();
         __UUPSUpgradeable_init();

@@ -9,12 +9,11 @@ interface ISimpleSwap {
     // ================================================================
     error SimpleSwap__NoEthToWithdraw();
     error SimpleSwap__SwapAmountInZero();
-    error SimpleSwap__ZeroBorrowAmount();
-    error SimpleSwap__MaxSwapUnchanged();
     error SimpleSwap__WithdrawEthFailed();
     error SimpleSwap__AddressNotAnOwner();
     error SimpleSwap__NoTokensToWithdraw();
     error SimpleSwap__FunctionDoesNotExist();
+    error SimpleSwap__ZeroTokensOutFromSwap();
     error SimpleSwap__SlippageToleranceUnchanged();
     error SimpleSwap__SlippageToleranceAboveMaximum();
 

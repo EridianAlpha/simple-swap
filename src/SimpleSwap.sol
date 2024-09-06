@@ -21,7 +21,6 @@ import {ITokenSwapCalcsModule} from "./interfaces/ITokenSwapCalcsModule.sol";
 
 // Uniswap Imports
 import {IV3SwapRouter} from "@uniswap/swap-router-contracts/contracts/interfaces/IV3SwapRouter.sol";
-import {IUniswapV3Pool} from "@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol";
 import {TransferHelper} from "@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol";
 
 /// @notice This logic contract has all the custom logic for the SimpleSwap contract.

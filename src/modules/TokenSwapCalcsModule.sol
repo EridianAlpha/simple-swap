@@ -9,7 +9,6 @@ pragma solidity 0.8.27;
 import {IUniswapV3Pool} from "@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol";
 
 // Interface Imports
-import {IWETH9} from "../interfaces/IWETH9.sol";
 import {IERC20Extended} from "../interfaces/IERC20Extended.sol";
 import {ITokenSwapCalcsModule} from "../interfaces/ITokenSwapCalcsModule.sol";
 
@@ -45,7 +44,7 @@ contract TokenSwapCalcsModule is ITokenSwapCalcsModule {
         address _uniswapV3PoolAddress,
         address _tokenOutAddress,
         uint16 _slippageTolerance
-    ) public view returns (uint256 minOut) {
+    ) external view returns (uint256 minOut) {
         IUniswapV3Pool pool = IUniswapV3Pool(_uniswapV3PoolAddress);
 
         // sqrtRatioX96 calculates the price of token1 in units of token0 (token1/token0)

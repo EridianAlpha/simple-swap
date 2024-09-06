@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.27;
 
-import {ISwapRouter} from "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
-
 /// @title TokenSwapCalcsModule interface
 /// @notice This interface defines the essential structures and functions for the TokenSwapCalcsModule contract.
 interface ITokenSwapCalcsModule {
