@@ -1,0 +1,695 @@
+<!DOCTYPE HTML>
+<html lang="en" class="dark" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>README - &lt;ADD_TITLE_HERE&gt;</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="book.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('dark')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html" class="active">README</a></li><li class="chapter-item expanded "><a href="src/interfaces/index.html"><strong aria-hidden="true">1.</strong> interfaces</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="src/interfaces/IERC20Extended.sol/interface.IERC20Extended.html"><strong aria-hidden="true">1.1.</strong> IERC20Extended</a></li><li class="chapter-item expanded "><a href="src/interfaces/ISimpleSwap.sol/interface.ISimpleSwap.html"><strong aria-hidden="true">1.2.</strong> ISimpleSwap</a></li><li class="chapter-item expanded "><a href="src/interfaces/ITokenSwapCalcsModule.sol/interface.ITokenSwapCalcsModule.html"><strong aria-hidden="true">1.3.</strong> ITokenSwapCalcsModule</a></li><li class="chapter-item expanded "><a href="src/interfaces/IWETH9.sol/interface.IWETH9.html"><strong aria-hidden="true">1.4.</strong> IWETH9</a></li></ol></li><li class="chapter-item expanded "><a href="src/internalFunctionHelpers/index.html"><strong aria-hidden="true">2.</strong> internalFunctionHelpers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="src/internalFunctionHelpers/SimpleSwapInternalFunctionsHelper.sol/contract.SimpleSwapInternalFunctionsHelper.html"><strong aria-hidden="true">2.1.</strong> SimpleSwapInternalFunctionsHelper</a></li></ol></li><li class="chapter-item expanded "><a href="src/modules/index.html"><strong aria-hidden="true">3.</strong> modules</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="src/modules/TokenSwapCalcsModule.sol/contract.TokenSwapCalcsModule.html"><strong aria-hidden="true">3.1.</strong> TokenSwapCalcsModule</a></li></ol></li><li class="chapter-item expanded "><a href="src/Core.sol/contract.Core.html"><strong aria-hidden="true">4.</strong> Core</a></li><li class="chapter-item expanded "><a href="src/Getters.sol/abstract.Getters.html"><strong aria-hidden="true">5.</strong> Getters</a></li><li class="chapter-item expanded "><a href="src/Imports.sol/abstract.Imports.html"><strong aria-hidden="true">6.</strong> Imports</a></li><li class="chapter-item expanded "><a href="src/ModifiersAndChecks.sol/abstract.ModifiersAndChecks.html"><strong aria-hidden="true">7.</strong> ModifiersAndChecks</a></li><li class="chapter-item expanded "><a href="src/SimpleSwap.sol/contract.SimpleSwap.html"><strong aria-hidden="true">8.</strong> SimpleSwap</a></li><li class="chapter-item expanded "><a href="src/Updates.sol/abstract.Updates.html"><strong aria-hidden="true">9.</strong> Updates</a></li><li class="chapter-item expanded "><a href="src/Variables.sol/abstract.Variables.html"><strong aria-hidden="true">10.</strong> Variables</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">&lt;ADD_TITLE_HERE&gt;</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/EridianAlpha/simple-swap" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="simpleswap"><a class="header" href="#simpleswap">SimpleSwap</a></h1>
+<ul>
+<li><a href="#1-overview">1. Overview</a></li>
+<li><a href="#2-usage">2. Usage</a></li>
+<li><a href="#3-functions">3. Functions</a>
+<ul>
+<li><a href="#31-swap-functions">3.1. Swap Functions</a></li>
+<li><a href="#32-withdraw-functions">3.2. Withdraw Functions</a></li>
+<li><a href="#33-contract-upgrade-functions">3.3. Contract Upgrade Functions</a></li>
+<li><a href="#34-contract-update-functions">3.4. Contract Update Functions</a></li>
+<li><a href="#35-role-management-functions">3.5. Role Management Functions</a></li>
+<li><a href="#36-getter-functions">3.6. Getter Functions</a></li>
+</ul>
+</li>
+<li><a href="#4-installation">4. Installation</a>
+<ul>
+<li><a href="#41-clone-repository">4.1. Clone repository</a></li>
+<li><a href="#42-install-dependencies">4.2. Install Dependencies</a></li>
+<li><a href="#43-create-the-env-file">4.3. Create the <code>.env</code> file</a></li>
+</ul>
+</li>
+<li><a href="#5-testing">5. Testing</a>
+<ul>
+<li><a href="#51-tests-fork">5.1. Tests (Fork)</a></li>
+<li><a href="#52-coverage-fork">5.2. Coverage (Fork)</a></li>
+</ul>
+</li>
+<li><a href="#6-deployment">6. Deployment</a></li>
+<li><a href="#7-interactions">7. Interactions</a>
+<ul>
+<li><a href="#71-force-send-eth">7.1. Force Send ETH</a></li>
+<li><a href="#72-swap-functions">7.2. Swap Functions</a>
+<ul>
+<li><a href="#721-send-eth">7.2.1. Send ETH</a></li>
+<li><a href="#722-swap-usdc">7.2.2. Swap USDC</a></li>
+</ul>
+</li>
+<li><a href="#73-withdraw-functions">7.3. Withdraw Functions</a>
+<ul>
+<li><a href="#731-withdraw-eth">7.3.1. Withdraw ETH</a></li>
+<li><a href="#732-withdraw-tokens">7.3.2. Withdraw Tokens</a></li>
+</ul>
+</li>
+<li><a href="#74-upgrades">7.4. Upgrades</a></li>
+<li><a href="#75-updates">7.5. Updates</a>
+<ul>
+<li><a href="#751-update-contract-address">7.5.1. Update Contract Address</a></li>
+<li><a href="#752-update-token-address">7.5.2. Update Token Address</a></li>
+<li><a href="#753-update-uniswapv3pool-address">7.5.3. Update UniswapV3Pool Address</a></li>
+<li><a href="#754-update-slippage-tolerance">7.5.4. Update Slippage Tolerance</a></li>
+</ul>
+</li>
+<li><a href="#76-role-management">7.6. Role Management</a>
+<ul>
+<li><a href="#761-grant-role">7.6.1. Grant Role</a></li>
+<li><a href="#762-revoke-role">7.6.2. Revoke Role</a></li>
+<li><a href="#763-get-role-admin">7.6.3. Get Role Admin</a></li>
+<li><a href="#764-get-role-member">7.6.4. Get Role Member</a></li>
+<li><a href="#765-get-role-members">7.6.5. Get Role Members</a></li>
+<li><a href="#766-get-role-member-count">7.6.6. Get Role Member Count</a></li>
+<li><a href="#767-check-has-role">7.6.7. Check Has Role</a></li>
+<li><a href="#768-renounce-role">7.6.8. Renounce Role</a></li>
+</ul>
+</li>
+<li><a href="#77-getters">7.7. Getters</a>
+<ul>
+<li><a href="#771-get-creator">7.7.1. Get Creator</a></li>
+<li><a href="#772-get-version">7.7.2. Get Version</a></li>
+<li><a href="#773-get-balance">7.7.3. Get Balance</a></li>
+<li><a href="#774-get-event-block-numbers">7.7.4. Get Event Block Numbers</a></li>
+<li><a href="#775-get-contract-address">7.7.5. Get Contract Address</a></li>
+<li><a href="#776-get-token-address">7.7.6. Get Token Address</a></li>
+<li><a href="#777-get-uniswap-v3-pool">7.7.7. Get Uniswap V3 Pool</a></li>
+<li><a href="#778-get-module-version">7.7.8. Get Module Version</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#8-build-and-deploy-documentation">8. Build and Deploy Documentation</a></li>
+<li><a href="#9-license">9. License</a></li>
+</ul>
+<h2 id="1-overview"><a class="header" href="#1-overview">1. Overview</a></h2>
+<p>SimpleSwap is an example project for swapping tokens using Uniswap V3.</p>
+<p>The contract structure is broken down into individual contracts, each inherited from the previous contract. This was done as an exercise to better understand smart contract inheritance and to highlight reusable code sections.</p>
+<p><a href="./src/Imports.sol">Imports</a> ➜ <a href="./src/Variables.sol">Variables</a> ➜ <a href="./src/Getters.sol">Getters</a> ➜ <a href="./src/ModifiersAndChecks.sol">ModifiersAndChecks</a> ➜ <a href="./src/Updates.sol">Updates</a> ➜ <a href="./src/Core.sol">Core</a> ➜ <a href="./src/SimpleSwap.sol">SimpleSwap</a></p>
+<p>This project builds on knowledge from the <a href="https://github.com/EridianAlpha/aave-position-manager">AavePM</a> project.</p>
+<p>The TokenSwap contract is a pure logic contract that can be used to swap ETH &lt;-&gt; USDC. It has no owner and is immutable. To upgrade the TokenSwap contract, a new contract must be deployed and the SimpleSwap contract must be updated to point to the new contract.</p>
+<h2 id="2-usage"><a class="header" href="#2-usage">2. Usage</a></h2>
+<ol>
+<li>Send ETH directly to the contract address to receive USDC on the sender address.</li>
+<li>Send USDC to the <code>swapUsdc</code> function to receive ETH on the sender address.</li>
+</ol>
+<h2 id="3-functions"><a class="header" href="#3-functions">3. Functions</a></h2>
+<h3 id="31-swap-functions"><a class="header" href="#31-swap-functions">3.1. Swap Functions</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Function</th><th>Restrictions</th><th>Description</th></tr></thead><tbody>
+<tr><td>receive</td><td><code>N/A</code></td><td>Receive ETH and swap for USDC.</td></tr>
+<tr><td>swapUsdc</td><td><code>N/A</code></td><td>Swap specified amount of USDC for ETH.</td></tr>
+</tbody></table>
+</div>
+<h3 id="32-withdraw-functions"><a class="header" href="#32-withdraw-functions">3.2. Withdraw Functions</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Function</th><th>Restrictions</th><th>Description</th></tr></thead><tbody>
+<tr><td>withdrawEth</td><td><code>Only To Owner Address</code></td><td>Withdraw any ETH in the contract to an owner address.</td></tr>
+<tr><td>withdrawTokens</td><td><code>Only To Owner Address</code></td><td>Withdraw specified token in the contract to an owner address.</td></tr>
+</tbody></table>
+</div>
+<h3 id="33-contract-upgrade-functions"><a class="header" href="#33-contract-upgrade-functions">3.3. Contract Upgrade Functions</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Function</th><th>Restrictions</th><th>Description</th></tr></thead><tbody>
+<tr><td>upgradeContract</td><td><code>OWNER_ROLE</code></td><td>Upgrade the contract to the specified implementation.</td></tr>
+</tbody></table>
+</div>
+<h3 id="34-contract-update-functions"><a class="header" href="#34-contract-update-functions">3.4. Contract Update Functions</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Function</th><th>Restrictions</th><th>Description</th></tr></thead><tbody>
+<tr><td>updateContractAddress</td><td><code>OWNER_ROLE</code></td><td>Update the specified contract address.</td></tr>
+<tr><td>updateTokenAddress</td><td><code>OWNER_ROLE</code></td><td>Update the specified token address.</td></tr>
+<tr><td>updateUniswapV3Pool</td><td><code>OWNER_ROLE</code></td><td>Update the specified Uniswap V3 pool.</td></tr>
+<tr><td>updateSlippageTolerance</td><td><code>OWNER_ROLE</code></td><td>Update the specified slippage tolerance.</td></tr>
+</tbody></table>
+</div>
+<h3 id="35-role-management-functions"><a class="header" href="#35-role-management-functions">3.5. Role Management Functions</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Function</th><th>Restrictions</th><th>Description</th></tr></thead><tbody>
+<tr><td>grantRole</td><td><code>Role Admin</code></td><td>Grant a role to an address.</td></tr>
+<tr><td>revokeRole</td><td><code>Role Admin</code></td><td>Revoke a role from an address.</td></tr>
+<tr><td>getRoleAdmin</td><td><code>N/A</code></td><td>Get the admin of a role for the identifier.</td></tr>
+<tr><td>getRoleMember</td><td><code>N/A</code></td><td>Get the member of a role for the identifier.</td></tr>
+<tr><td>getRoleMembers</td><td><code>N/A</code></td><td>Get the members of a role for the identifier.</td></tr>
+<tr><td>getRoleMemberCount</td><td><code>N/A</code></td><td>Get the member count of a role for the identifier.</td></tr>
+<tr><td>hasRole</td><td><code>N/A</code></td><td>Check if an address has a role.</td></tr>
+<tr><td>renounceRole</td><td><code>Role Member</code></td><td>Renounce a role from an address.</td></tr>
+</tbody></table>
+</div>
+<h3 id="36-getter-functions"><a class="header" href="#36-getter-functions">3.6. Getter Functions</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Function</th><th>Restrictions</th><th>Description</th></tr></thead><tbody>
+<tr><td>getCreator</td><td><code>N/A</code></td><td>Get the creator address of the contract.</td></tr>
+<tr><td>getEventBlockNumbers</td><td><code>N/A</code></td><td>Get the block numbers of all previous contract events.</td></tr>
+<tr><td>getVersion</td><td><code>N/A</code></td><td>Get the current contract version.</td></tr>
+<tr><td>getBalance</td><td><code>N/A</code></td><td>Get the balance of the contract.</td></tr>
+<tr><td>getContractAddress</td><td><code>N/A</code></td><td>Get the contract address of the identifier.</td></tr>
+<tr><td>getTokenAddress</td><td><code>N/A</code></td><td>Get the token address of the identifier.</td></tr>
+<tr><td>getUniswapV3Pool</td><td><code>N/A</code></td><td>Get the Uniswap V3 pool address of the identifier.</td></tr>
+<tr><td>getSlippageTolerance</td><td><code>N/A</code></td><td>Get the slippage tolerance of the contract.</td></tr>
+<tr><td>getSlippageToleranceMaximum</td><td><code>N/A</code></td><td>Get the maximum slippage tolerance of the contract.</td></tr>
+</tbody></table>
+</div>
+<h2 id="4-installation"><a class="header" href="#4-installation">4. Installation</a></h2>
+<h3 id="41-clone-repository"><a class="header" href="#41-clone-repository">4.1. Clone repository</a></h3>
+<pre><code class="language-bash">git clone https://github.com/EridianAlpha/simple-swap.git
+</code></pre>
+<h3 id="42-install-dependencies"><a class="header" href="#42-install-dependencies">4.2. Install Dependencies</a></h3>
+<p>This should happen automatically when first running a command, but the installation can be manually triggered with the following commands:</p>
+<pre><code class="language-bash">git submodule init
+git submodule update
+make install
+</code></pre>
+<h3 id="43-create-the-env-file"><a class="header" href="#43-create-the-env-file">4.3. Create the <code>.env</code> file</a></h3>
+<p>Use the <code>.env.example</code> file as a template to create a <code>.env</code> file.</p>
+<h2 id="5-testing"><a class="header" href="#5-testing">5. Testing</a></h2>
+<h3 id="51-tests-fork"><a class="header" href="#51-tests-fork">5.1. Tests (Fork)</a></h3>
+<pre><code class="language-bash">make test
+make test-v
+make test-summary
+</code></pre>
+<h3 id="52-coverage-fork"><a class="header" href="#52-coverage-fork">5.2. Coverage (Fork)</a></h3>
+<pre><code class="language-bash">make coverage
+make coverage-report
+</code></pre>
+<h2 id="6-deployment"><a class="header" href="#6-deployment">6. Deployment</a></h2>
+<p>Deploys SimpleSwap and all modules to the Anvil chain specified in the <code>.env</code> file.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make deploy anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make deploy holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make deploy base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make deploy base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h2 id="7-interactions"><a class="header" href="#7-interactions">7. Interactions</a></h2>
+<p>Interactions are defined in <code>./script/Interactions.s.sol</code></p>
+<p>If <code>DEPLOYED_CONTRACT_ADDRESS</code> is set in the <code>.env</code> file, that contract address will be used for interactions.
+If that variable is not set, the latest deployment on the specified chain will be used.</p>
+<h3 id="71-force-send-eth"><a class="header" href="#71-force-send-eth">7.1. Force Send ETH</a></h3>
+<p>Send ETH to the contract using a intermediate selfdestruct contract.
+This does not call the <code>receive</code> function on the contract.
+Input value in ETH e.g. <code>0.15</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make forceSendEth anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make forceSendEth holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make forceSendEth base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make forceSendEth base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h3 id="72-swap-functions"><a class="header" href="#72-swap-functions">7.2. Swap Functions</a></h3>
+<h4 id="721-send-eth"><a class="header" href="#721-send-eth">7.2.1. Send ETH</a></h4>
+<p>Send ETH to the contract to receive USDC.
+Input value in ETH e.g. <code>0.15</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make sendEth anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make sendEth holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make sendEth base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make sendEth base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="722-swap-usdc"><a class="header" href="#722-swap-usdc">7.2.2. Swap USDC</a></h4>
+<p>Swap USDC for ETH.
+Input value in USD e.g. <code>200</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make swapUsdc anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make swapUsdc holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make swapUsdc base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make swapUsdc base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h3 id="73-withdraw-functions"><a class="header" href="#73-withdraw-functions">7.3. Withdraw Functions</a></h3>
+<h4 id="731-withdraw-eth"><a class="header" href="#731-withdraw-eth">7.3.1. Withdraw ETH</a></h4>
+<p>Withdraw all ETH in the contract to an owner address.
+Requires the specified withdrawal address to have the <code>OWNER_ROLE</code>.
+Input value as an address e.g. <code>0x123...</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make withdrawEth anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make withdrawEth holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make withdrawEth base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make withdrawEth base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="732-withdraw-tokens"><a class="header" href="#732-withdraw-tokens">7.3.2. Withdraw Tokens</a></h4>
+<p>Withdraw all of the specified token in the contract to an owner address.
+Requires the specified withdrawal address to have the <code>OWNER_ROLE</code>.
+Input value 1 as a token identifier e.g. <code>USDC</code>.
+Input value 2 as an address e.g. <code>0x123...</code>.
+Combined input value e.g. <code>USDC,0x123...</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make withdrawTokens anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make withdrawTokens holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make withdrawTokens base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make withdrawTokens base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h3 id="74-upgrades"><a class="header" href="#74-upgrades">7.4. Upgrades</a></h3>
+<p>Upgrade the contract to the latest logic implementation while maintaining the same proxy address.
+This also redeploys all modules and updates their contract addresses on SimpleSwap.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make upgrade anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make upgrade holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make upgrade base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make upgrade base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h3 id="75-updates"><a class="header" href="#75-updates">7.5. Updates</a></h3>
+<h4 id="751-update-contract-address"><a class="header" href="#751-update-contract-address">7.5.1. Update Contract Address</a></h4>
+<p>Update the specified contract identifier to a new address.
+Input value 1 as a contract identifier e.g. <code>uniswapV3Router</code>.
+Input value 2 as an address e.g. <code>0x123...</code>.
+Combined input value e.g. <code>uniswapV3Router,0x123...</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make updateContractAddress anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make updateContractAddress holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make updateContractAddress base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make updateContractAddress base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="752-update-token-address"><a class="header" href="#752-update-token-address">7.5.2. Update Token Address</a></h4>
+<p>Update the specified token identifier to a new address.
+Input value 1 as a token identifier e.g. <code>USDC</code>.
+Input value 2 as an address e.g. <code>0x123...</code>.
+Combined input value e.g. <code>USDC,0x123...</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make updateTokenAddress anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make updateTokenAddress holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make updateTokenAddress base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make updateTokenAddress base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="753-update-uniswapv3pool-address"><a class="header" href="#753-update-uniswapv3pool-address">7.5.3. Update UniswapV3Pool Address</a></h4>
+<p>Update the specified token identifier to a new address and fee.
+Input value 1 as a UniswapV3Pool identifier e.g. <code>USDC/ETH</code>.
+Input value 2 as an address e.g. <code>0x123...</code>.
+Input value 3 as a fee e.g. <code>500</code> for a fee of <code>0.05%</code>.
+Combined input value e.g. <code>USDC/ETH,0x123...,500</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make updateUniswapV3PoolAddress anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make updateUniswapV3PoolAddress holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make updateUniswapV3PoolAddress base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make updateUniswapV3PoolAddress base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="754-update-slippage-tolerance"><a class="header" href="#754-update-slippage-tolerance">7.5.4. Update Slippage Tolerance</a></h4>
+<p>Input value to 2 decimal places e.g. <code>200</code> for a Slippage Tolerance of <code>0.5%</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make updateSlippageTolerance anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make updateSlippageTolerance holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make updateSlippageTolerance base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make updateSlippageTolerance base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h3 id="76-role-management"><a class="header" href="#76-role-management">7.6. Role Management</a></h3>
+<h4 id="761-grant-role"><a class="header" href="#761-grant-role">7.6.1. Grant Role</a></h4>
+<p>Grant a role to an address.
+Requires the caller to be an admin of the role being granted.
+Input value 1 as a role e.g. <code>OWNER_ROLE</code>.
+Input value 2 as an address e.g. <code>0x123...</code>.
+Combined input value e.g. <code>OWNER_ROLE,0x123...</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make grantRole anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make grantRole holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make grantRole base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make grantRole base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="762-revoke-role"><a class="header" href="#762-revoke-role">7.6.2. Revoke Role</a></h4>
+<p>Revoke a role from an address. Requires the caller to be an admin of the role being revoked.
+Input value 1 as a role e.g. <code>OWNER_ROLE</code>.
+Input value 2 as an address e.g. <code>0x123...</code>.
+Combined input value e.g. <code>OWNER_ROLE,0x123...</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make revokeRole anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make revokeRole holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make revokeRole base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make revokeRole base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="763-get-role-admin"><a class="header" href="#763-get-role-admin">7.6.3. Get Role Admin</a></h4>
+<p>Get the admin for the specified role.
+Input value as a role e.g. <code>OWNER_ROLE</code>.
+Returns keccak256 hash of the admin role.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make getRoleAdmin anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make getRoleAdmin holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make getRoleAdmin base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make getRoleAdmin base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="764-get-role-member"><a class="header" href="#764-get-role-member">7.6.4. Get Role Member</a></h4>
+<p>Get the member for the specified role and index.
+Input value 1 as a role e.g. <code>OWNER_ROLE</code>.
+Input value 2 as index e.g. <code>0</code>.
+Combined input value e.g. <code>OWNER_ROLE,0</code>.
+Returns address of the member.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make getRoleMember anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make getRoleMember holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make getRoleMember base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make getRoleMember base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="765-get-role-members"><a class="header" href="#765-get-role-members">7.6.5. Get Role Members</a></h4>
+<p>Get all members for the specified role.
+Input value as a role e.g. <code>OWNER_ROLE</code>.
+Returns array of addresses of the members.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make getRoleMembers anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make getRoleMembers holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make getRoleMembers base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make getRoleMembers base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="766-get-role-member-count"><a class="header" href="#766-get-role-member-count">7.6.6. Get Role Member Count</a></h4>
+<p>Get the member count for the specified role.
+Input value as a role e.g. <code>OWNER_ROLE</code>.
+Returns the number of members in the role.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make getRoleMemberCount anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make getRoleMemberCount holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make getRoleMemberCount base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make getRoleMemberCount base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="767-check-has-role"><a class="header" href="#767-check-has-role">7.6.7. Check Has Role</a></h4>
+<p>Check if an address has the specified role.
+Input value 1 as a role e.g. <code>OWNER_ROLE</code>.
+Input value 2 as an address e.g. <code>0x123...</code>.
+Combined input value e.g. <code>OWNER_ROLE,0x123...</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make hasRole anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make hasRole holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make hasRole base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make hasRole base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="768-renounce-role"><a class="header" href="#768-renounce-role">7.6.8. Renounce Role</a></h4>
+<p>Renounce the specified role from an address.
+Any address can renounce a role from themselves.
+Input value as a role e.g. <code>OWNER_ROLE</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make renounceRole anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make renounceRole holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make renounceRole base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make renounceRole base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h3 id="77-getters"><a class="header" href="#77-getters">7.7. Getters</a></h3>
+<h4 id="771-get-creator"><a class="header" href="#771-get-creator">7.7.1. Get Creator</a></h4>
+<p>Returns the contract creator address.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make getCreator anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make getCreator holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make getCreator base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make getCreator base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="772-get-version"><a class="header" href="#772-get-version">7.7.2. Get Version</a></h4>
+<p>Returns the current version of the contract.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make getVersion anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make getVersion holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make getVersion base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make getVersion base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="773-get-balance"><a class="header" href="#773-get-balance">7.7.3. Get Balance</a></h4>
+<p>Input value as token identifier e.g. <code>USDC</code>.
+Returns the balance of the contract for the specified token.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make getBalance anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make getBalance holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make getBalance base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make getBalance base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="774-get-event-block-numbers"><a class="header" href="#774-get-event-block-numbers">7.7.4. Get Event Block Numbers</a></h4>
+<p>Returns the block numbers of all previous contract events.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make getEventBlockNumbers anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make getEventBlockNumbers holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make getEventBlockNumbers base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make getEventBlockNumbers base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="775-get-contract-address"><a class="header" href="#775-get-contract-address">7.7.5. Get Contract Address</a></h4>
+<p>Input value as a contract identifier e.g. <code>uniswapV3Router</code>.
+Returns the contract address of the specified identifier.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make getContractAddress anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make getContractAddress holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make getContractAddress base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make getContractAddress base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="776-get-token-address"><a class="header" href="#776-get-token-address">7.7.6. Get Token Address</a></h4>
+<p>Input value as a token identifier e.g. <code>USDC</code>.
+Returns the token address of the specified identifier.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make getTokenAddress anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make getTokenAddress holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make getTokenAddress base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make getTokenAddress base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="777-get-uniswap-v3-pool"><a class="header" href="#777-get-uniswap-v3-pool">7.7.7. Get Uniswap V3 Pool</a></h4>
+<p>Input value as a Uniswap V3 Pool identifier e.g. <code>USDC/ETH</code>.
+Returns the address and fee of the specified identifier.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make getUniswapV3Pool anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make getUniswapV3Pool holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make getUniswapV3Pool base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make getUniswapV3Pool base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h4 id="778-get-module-version"><a class="header" href="#778-get-module-version">7.7.8. Get Module Version</a></h4>
+<p>Input value as a module identifier e.g. <code>tokenSwapCalcsModule</code>.
+Returns the version of the specified module.</p>
+<div class="table-wrapper"><table><thead><tr><th>Chain</th><th>Command</th></tr></thead><tbody>
+<tr><td>Anvil</td><td><code>make getModuleVersion anvil</code></td></tr>
+<tr><td>Holesky</td><td><code>make getModuleVersion holesky</code></td></tr>
+<tr><td>Base Sepolia</td><td><code>make getModuleVersion base-sepolia</code></td></tr>
+<tr><td>Base Mainnet</td><td><code>make getModuleVersion base-mainnet</code></td></tr>
+</tbody></table>
+</div>
+<h2 id="8-build-and-deploy-documentation"><a class="header" href="#8-build-and-deploy-documentation">8. Build and Deploy Documentation</a></h2>
+<p>Instructions on how to build and deploy the documentation book are detailed here: <a href="https://docs.eridianalpha.com/ethereum-dev/foundry-notes/docs-and-github-pages">https://docs.eridianalpha.com/ethereum-dev/foundry-notes/docs-and-github-pages</a></p>
+<h2 id="9-license"><a class="header" href="#9-license">9. License</a></h2>
+<p><a href="https://choosealicense.com/licenses/mit/">MIT</a></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next prefetch" href="src/interfaces/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next prefetch" href="src/interfaces/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="solidity.min.js"></script>
+
+
+    </div>
+    </body>
+</html>
