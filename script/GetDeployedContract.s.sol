@@ -8,6 +8,8 @@ import {DevOpsTools} from "@foundry-devops/src/DevOpsTools.sol";
 // │                      GET DEPLOYED CONTRACT                   │
 // ================================================================
 contract GetDeployedContract is Script {
+    function test() public virtual {} // Added to remove this whole contract from coverage report.
+
     function getDeployedContract(string memory contractName) public view returns (address deployedContractAddress) {
         try vm.envAddress("DEPLOYED_CONTRACT_ADDRESS") returns (address addr) {
             if (addr != address(0)) {

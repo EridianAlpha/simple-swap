@@ -125,7 +125,7 @@ contract Core is Updates {
         require(tokenBalance > 0, SimpleSwap__NoTokensToWithdraw());
 
         // Effects
-        emit TokensWithdrawn(_identifier, tokenBalance);
+        emit TokensWithdrawn(_withdrawAddress, _identifier, tokenBalance);
         _storeEventBlockNumber();
 
         // Interactions

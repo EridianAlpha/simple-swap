@@ -6,12 +6,17 @@ pragma solidity 0.8.27;
 import {Variables} from "./Variables.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
+
 // ================================================================
 // │                    SIMPLE SWAP - GETTERS                     │
 // ================================================================
 
 /// @notice This getters contract has all the custom getter functions for the SimpleSwap contract.
 abstract contract Getters is Variables {
+    // Library directives
+    using Strings for string;
+
     // ================================================================
     // │                        CONTRACT VARIABLES                    │
     // ================================================================
@@ -32,7 +37,7 @@ abstract contract Getters is Variables {
     /// @param _identifier The identifier for the token address.
     /// @return balance The balance of the specified token identifier.
     function getBalance(string memory _identifier) public view returns (uint256 balance) {
-        if (keccak256(abi.encodePacked(_identifier)) == keccak256(abi.encodePacked("ETH"))) {
+        if (Strings.equal(_identifier, "ETH")) {
             return balance = address(this).balance;
         } else {
             return balance = IERC20(s_tokenAddresses[_identifier]).balanceOf(address(this));

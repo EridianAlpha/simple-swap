@@ -16,7 +16,12 @@ contract SimpleSwapWithdrawEthTest is SimpleSwapTestSetup {
     function withdrawEth_SetUp() public {
         vm.prank(owner1);
         new ForceSendEth{value: SEND_VALUE}(payable(address(simpleSwap)));
-        require(address(simpleSwap).balance > 0, "Balance before withdrawEth is 0");
+        require(address(simpleSwap).balance > 0, "withdrawEth_SetUp balance is 0");
+    }
+
+    function test_WithdrawZeroEthFails() public {
+        vm.expectRevert(ISimpleSwap.SimpleSwap__NoEthToWithdraw.selector);
+        simpleSwap.withdrawEth(owner1);
     }
 
     function test_WithdrawEthToNotOwnerFails() public {
@@ -40,8 +45,7 @@ contract SimpleSwapWithdrawEthTest is SimpleSwapTestSetup {
         simpleSwap.withdrawEth(owner1);
 
         // Check all ETH has been withdrawn
-        uint256 expectedRemaining = 0;
-        assertEq(address(simpleSwap).balance, expectedRemaining);
+        assertEq(address(simpleSwap).balance, 0);
     }
 
     function test_WithdrawEthEventBlockStored() public {

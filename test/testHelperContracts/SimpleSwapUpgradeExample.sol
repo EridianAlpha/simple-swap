@@ -6,7 +6,7 @@ import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Ini
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /// @notice This contract is an example of an upgradeable contract using the UUPS pattern.
-contract UpgradeExample is Initializable, AccessControlUpgradeable, UUPSUpgradeable {
+contract SimpleSwapUpgradeExample is Initializable, AccessControlUpgradeable, UUPSUpgradeable {
     function test() public {} // Added to remove this whole testing file from coverage report.
 
     bytes32 private constant OWNER_ROLE = keccak256("OWNER_ROLE");

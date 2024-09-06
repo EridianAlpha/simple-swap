@@ -26,6 +26,8 @@ import {TokenSwapCalcsModule} from "src/modules/TokenSwapCalcsModule.sol";
 // │                         INTERACTIONS                         │
 // ================================================================
 contract Interactions is GetDeployedContract {
+    function test() public override {} // Added to remove this whole contract from coverage report.
+
     // Library directives
     using Address for address payable;
 

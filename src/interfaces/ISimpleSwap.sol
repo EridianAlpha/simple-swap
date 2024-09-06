@@ -46,7 +46,7 @@ interface ISimpleSwap {
 
     // Tokens
     event EthWithdrawn(address indexed to, uint256 amount);
-    event TokensWithdrawn(string identifier, uint256 tokenBalance);
+    event TokensWithdrawn(address indexed to, string identifier, uint256 amount);
 
     // Upgrades
     event SimpleSwapInitialized(address indexed creator);
