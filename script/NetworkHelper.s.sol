@@ -43,6 +43,8 @@ contract NetworkHelper is Script {
             chainName = "ETH_MAINNET";
         } else if (chainId == 8453) {
             chainName = "BASE_MAINNET";
+        } else if (chainId == 84532) {
+            chainName = "BASE_SEPOLIA";
         } else {
             revert(string(abi.encodePacked("Chain not supported: ", Strings.toString(block.chainid))));
         }
