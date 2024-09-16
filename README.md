@@ -168,7 +168,7 @@ make coverage-report
 
 ## 6. Deployment
 
-Deploys SimpleSwap and all modules to the Anvil chain specified in the `.env` file.
+Deploys the SimpleSwap contract and all module contracts.
 
 | Chain        | Command                    |
 | ------------ | -------------------------- |
